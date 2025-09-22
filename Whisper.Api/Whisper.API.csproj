@@ -13,4 +13,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Whisper.DTOs\Whisper.DTOs.csproj" />
+    <ProjectReference Include="..\Whisper.Services\Whisper.Services.csproj" />
+    <ProjectReference Include="..\Whisper.Authentication\Whisper.Authentication.csproj" />
+  </ItemGroup>
+
 </Project>
