@@ -6,4 +6,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Whisper.Common\Whisper.Common.csproj" />
+    <ProjectReference Include="..\Whisper.Data\Whisper.Data.csproj" />
+    <ProjectReference Include="..\Whisper.DTOs\Whisper.DTOs.csproj" />
+  </ItemGroup>
+
 </Project>
