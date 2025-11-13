@@ -41,13 +41,11 @@ namespace Whisper.Authentication.Services
         }
 
         //TO DO:
-        //1. Token Refresh (POST /auth/refresh)
         //2. Logout/Token Revocation (POST /auth/logout)
         //3. Password Reset Flow (request + confirm endpoints)
         //4. Email Verification (POST /auth/verify-email)
         //5. Session Management (list/revoke sessions)
         //6. Two-Factor Authentication (enable/verify)
-        //7. Phone number validation.
         //8. Validation if the email domain is reachable - SignalR
         //9. Logging Erros in .log files or app console for easier debugging and monitoring
         //10. Implement memory caching for username, email and tokens(to reduce db calls).
@@ -79,14 +77,27 @@ namespace Whisper.Authentication.Services
             string passwordHash = requestUser.Password = BCrypt.Net.BCrypt.HashPassword(requestUser.Password);
             (User user, UserCredentials credentials) = _authFactory.Map(requestUser, passwordHash);
 
-            AuthResponseDto tokens = await GenerateAndAttachTokens(user);
+            using var transaction = await _authRepository.BeginTransactionAsync();
 
             bool isRegistrationSuccess = await _authRepository.AddUserAsync(user);
 
             if (!isRegistrationSuccess)
             {
-                return ApiResponse<AuthResponseDto>.Failure(ResponseMessages.RegistratoinFailed, ResponseCodes.RegistrationFailed);
+                await transaction.RollbackAsync();
+                return ApiResponse<AuthResponseDto>.Failure(ResponseMessages.RegistrationFailed, ResponseCodes.RegistrationFailed);
             }
+
+            bool isCredentialsSuccess = await _authRepository.SaveUserCredetialsAsync(credentials);
+
+            if (!isCredentialsSuccess)
+            {
+                await transaction.RollbackAsync();
+                return ApiResponse<AuthResponseDto>.Failure(ResponseMessages.CredentialsSaveFailed, ResponseCodes.CredentialsSaveFailed);
+            }
+
+            await transaction.CommitAsync();
+
+            AuthResponseDto tokens = await GenerateAndAttachTokens(user);
 
             return ApiResponse<AuthResponseDto>.Success(tokens, ResponseMessages.UserRegistered);
         }

@@ -14,7 +14,7 @@
         public const string UserNotFound = "User not found";
         public const string EmailExists = "Email already exists.";
         public const string InvalidEmail = "Email is invalid.";
-        public const string RegistratoinFailed = "Registration failed, please try again later.";
+        public const string RegistrationFailed = "Registration failed, please try again later.";
         public const string InvalidCredentials = "Wrong username or password.";
         public const string WeakPassword = "Password must contain uppercase, lowercase, number, and special character.";
         public const string RefreshNotFound = "Refresh token not found.";
@@ -22,5 +22,6 @@
         public const string InvalidAccessToken = "Access token is invalid.";
         public const string RefreshRevokeFailed = "Failed to revoke refresh token. Please try again later.";
         public const string RefreshAddFailed = "Failed to add refresh token. Please try again later.";
+        public const string CredentialsSaveFailed = "Failed to save user credentials.";
     }
 }

@@ -16,5 +16,6 @@
         public const string InvalidAccessToken = "INVALID_ACCESS_TOKEN";
         public const string RefreshRevokeFailed = "REFRESH_REVOKE_FAILED";
         public const string RefreshAddFailed = "REFRESH_ADD_FAILED";
+        public const string CredentialsSaveFailed = "CREDENTIALS_SAVE_FAILED";
     }
 }

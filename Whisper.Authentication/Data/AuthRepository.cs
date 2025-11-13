@@ -1,8 +1,9 @@
-﻿using Whisper.Data.Models;
-using Whisper.Data.Models.Authentication;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Whisper.Authentication.Data.Interfaces;
 using Whisper.Data.Context;
-using Microsoft.EntityFrameworkCore;
+using Whisper.Data.Models;
+using Whisper.Data.Models.Authentication;
 
 namespace Whisper.Authentication.Data
 {
@@ -13,6 +14,11 @@ namespace Whisper.Authentication.Data
         public AuthRepository(ApplicationContext context)
         {
             _context = context;
+        }
+
+        public async Task<IDbContextTransaction> BeginTransactionAsync()
+        {
+            return await _context.Database.BeginTransactionAsync();
         }
 
         public async Task<bool> AddUserAsync(User user)
@@ -44,6 +50,12 @@ namespace Whisper.Authentication.Data
             return await _context.Users
                                  .Include(u => u.RefreshTokens)
                                  .FirstOrDefaultAsync(u => u.Username == identifier || u.Email == identifier);
+        }
+
+        public async Task<bool> SaveUserCredetialsAsync(UserCredentials userCredentials)
+        {
+            _context.Add(userCredentials);
+            return await _context.SaveChangesAsync() > 0;
         }
 
         public async Task<User?> GetUserWithCredentialsByIdentifierAsync(string identifier)
@@ -86,5 +98,6 @@ namespace Whisper.Authentication.Data
             _context.Users.Update(user);
             return await _context.SaveChangesAsync() > 0;
         }
+
     }
 }

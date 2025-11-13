@@ -1,10 +1,12 @@
-﻿using Whisper.Data.Models.Authentication;
+﻿using Microsoft.EntityFrameworkCore.Storage;
 using Whisper.Data.Models;
+using Whisper.Data.Models.Authentication;
 
 namespace Whisper.Authentication.Data.Interfaces
 {
     public interface IAuthRepository
     {
+        Task<IDbContextTransaction> BeginTransactionAsync();
         Task<bool> AddUserAsync(User user);
         Task<(bool usernameExists, bool emailExists)> CheckUserExistenceAsync(string username, string email);
         Task<User?> GetUserByIdentifierAsync(string identifier);
@@ -14,5 +16,7 @@ namespace Whisper.Authentication.Data.Interfaces
         Task<bool> SaveRevokedRefreshTokenAsync(RevokedToken revokedToken, RefreshToken refreshToken);
         Task<bool> SaveRefreshTokenAsync(RefreshToken refreshToken);
         Task<bool> SaveUserRefreshTokenAsync(User user);
+        Task<bool> SaveUserCredetialsAsync(UserCredentials userCredentials);
+
     }
 }
