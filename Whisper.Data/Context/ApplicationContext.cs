@@ -16,11 +16,14 @@ namespace Whisper.Data.Context
         public DbSet<UserCredentials> UserCredentials { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<RevokedToken> RevokedTokens { get; set; }
+        public DbSet<Chat> Chats { get; set; }
+        public DbSet<Message> Messages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
+            // User configuration
             modelBuilder.Entity<User>(user =>
             {
                 user.HasIndex(u => u.Username).IsUnique();
@@ -46,25 +49,54 @@ namespace Whisper.Data.Context
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
+            // UserCredentials configuration
             modelBuilder.Entity<UserCredentials>(uc =>
             {
                 uc.HasIndex(x => x.UserId).IsUnique();
             });
 
+            // RefreshToken configuration
             modelBuilder.Entity<RefreshToken>(rt =>
             {
                 rt.HasIndex(r => r.TokenHash).IsUnique();
             });
 
+            // RevokedToken configuration
             modelBuilder.Entity<RevokedToken>(rvt =>
             {
                 rvt.HasIndex(r => r.TokenHash);
                 rvt.HasIndex(r => r.RevokedAt);
             });
 
+            // 👇 NEW SECTION: Chat and Message relationships
+            modelBuilder.Entity<Chat>(chat =>
+            {
+                // Many-to-many: Chat ↔ Users
+                chat.HasMany(c => c.Users)
+                    .WithMany(u => u.Chats)
+                    .UsingEntity(j => j.ToTable("UserChats"));
+
+                // 1:N Chat -> Messages
+                chat.HasMany(c => c.Messages)
+                    .WithOne(m => m.Chat)
+                    .HasForeignKey(m => m.ChatId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<Message>(msg =>
+            {
+                // 1:N User -> MessagesSent
+                msg.HasOne(m => m.User)
+                    .WithMany(u => u.MessagesSent)
+                    .HasForeignKey(m => m.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            // Example of optional seeding (you can re-enable later if needed)
+            /*
             var seededUserId = Guid.Parse("a1b2c3d4-1234-5678-9012-abcdef123456");
 
-/*            modelBuilder.Entity<User>().HasData(new User
+            modelBuilder.Entity<User>().HasData(new User
             {
                 Id = seededUserId,
                 Username = "test",
@@ -73,14 +105,14 @@ namespace Whisper.Data.Context
                 Role = "User"
             });
 
-            // seed credentials (password should be hashed; here shown as placeholder)
             modelBuilder.Entity<UserCredentials>().HasData(new UserCredentials
             {
                 Id = Guid.NewGuid(),
                 UserId = seededUserId,
-                PasswordHash = "$2a$...hash...", // keep real bcrypt hash here
+                PasswordHash = "$2a$...hash...",
                 CreatedAt = DateTime.UtcNow
-            });*/
+            });
+            */
         }
     }
 }

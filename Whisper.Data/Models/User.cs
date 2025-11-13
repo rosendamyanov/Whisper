@@ -13,5 +13,8 @@ namespace Whisper.Data.Models
         public UserCredentials Credentials { get; set; }
         public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
         public ICollection<RevokedToken> RevokedTokens { get; set; } = new List<RevokedToken>();
+
+        public ICollection<Chat> Chats { get; set; } = new List<Chat>();
+        public ICollection<Message> MessagesSent { get; set; } = new List<Message>();
     }
 }
