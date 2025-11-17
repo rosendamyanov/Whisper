@@ -16,80 +16,120 @@ namespace Whisper.Data.Context
         public DbSet<UserCredentials> UserCredentials { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<RevokedToken> RevokedTokens { get; set; }
+
         public DbSet<Chat> Chats { get; set; }
         public DbSet<Message> Messages { get; set; }
+        public DbSet<LiveStream> Streams { get; set; }
+        public DbSet<Friendship> Friendships { get; set; }
+        public DbSet<VoiceSession> VoiceSessions { get; set; }
+        public DbSet<VoiceParticipant> VoiceParticipants { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // User configuration
+            // USER CONFIG
             modelBuilder.Entity<User>(user =>
             {
                 user.HasIndex(u => u.Username).IsUnique();
                 user.HasIndex(u => u.Email).IsUnique();
 
-                // 1:1 User -> UserCredentials
                 user.HasOne(u => u.Credentials)
                     .WithOne(c => c.User)
                     .HasForeignKey<UserCredentials>(c => c.UserId)
-                    .IsRequired()
                     .OnDelete(DeleteBehavior.Cascade);
 
-                // 1:N User -> RefreshTokens
                 user.HasMany(u => u.RefreshTokens)
                     .WithOne(rt => rt.User)
                     .HasForeignKey(rt => rt.UserId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .OnDelete(DeleteBehavior.Restrict);
 
-                // 1:N User -> RevokedTokens
                 user.HasMany(u => u.RevokedTokens)
                     .WithOne(rt => rt.User)
                     .HasForeignKey(rt => rt.UserId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                user.HasMany(u => u.MessagesSent)
+                    .WithOne(m => m.User)
+                    .HasForeignKey(m => m.UserId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
 
-            // UserCredentials configuration
-            modelBuilder.Entity<UserCredentials>(uc =>
+            // FRIENDSHIPS
+            modelBuilder.Entity<Friendship>(f =>
             {
-                uc.HasIndex(x => x.UserId).IsUnique();
+                f.HasOne(fr => fr.User)
+                 .WithMany(u => u.Friendships)
+                 .HasForeignKey(fr => fr.UserId)
+                 .OnDelete(DeleteBehavior.Restrict);
+
+                f.HasOne(fr => fr.Friend)
+                 .WithMany()
+                 .HasForeignKey(fr => fr.FriendId)
+                 .OnDelete(DeleteBehavior.Restrict);
+
+                f.HasIndex(fr => new { fr.UserId, fr.FriendId }).IsUnique();
             });
 
-            // RefreshToken configuration
-            modelBuilder.Entity<RefreshToken>(rt =>
+            // MESSAGES
+            modelBuilder.Entity<Message>(msg =>
             {
-                rt.HasIndex(r => r.TokenHash).IsUnique();
+                msg.HasOne(m => m.Chat)
+                   .WithMany(c => c.Messages)
+                   .HasForeignKey(m => m.ChatId)
+                   .OnDelete(DeleteBehavior.Cascade);
             });
 
-            // RevokedToken configuration
-            modelBuilder.Entity<RevokedToken>(rvt =>
-            {
-                rvt.HasIndex(r => r.TokenHash);
-                rvt.HasIndex(r => r.RevokedAt);
-            });
-
-            // 👇 NEW SECTION: Chat and Message relationships
+            // CHATS
             modelBuilder.Entity<Chat>(chat =>
             {
-                // Many-to-many: Chat ↔ Users
                 chat.HasMany(c => c.Users)
                     .WithMany(u => u.Chats)
                     .UsingEntity(j => j.ToTable("UserChats"));
 
-                // 1:N Chat -> Messages
-                chat.HasMany(c => c.Messages)
-                    .WithOne(m => m.Chat)
-                    .HasForeignKey(m => m.ChatId)
+                chat.HasOne(c => c.ActiveStream)
+                    .WithOne()
+                    .HasForeignKey<Chat>(c => c.ActiveStreamId)
+                    .OnDelete(DeleteBehavior.SetNull);
+            });
+
+            // STREAMS
+            modelBuilder.Entity<LiveStream>(stream =>
+            {
+                stream.HasOne(s => s.HostUser)
+                    .WithMany()
+                    .HasForeignKey(s => s.HostUserId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            // VOICE SESSIONS
+            modelBuilder.Entity<VoiceSession>(vs =>
+            {
+                vs.HasOne(v => v.HostUser)
+                    .WithMany()
+                    .HasForeignKey(v => v.HostUserId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                vs.HasOne(v => v.Chat)
+                    .WithMany()
+                    .HasForeignKey(v => v.ChatId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                vs.HasMany(v => v.Participants)
+                    .WithOne(p => p.VoiceSession)
+                    .HasForeignKey(p => p.VoiceSessionId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
 
-            modelBuilder.Entity<Message>(msg =>
+            // VOICE PARTICIPANTS
+            modelBuilder.Entity<VoiceParticipant>(vp =>
             {
-                // 1:N User -> MessagesSent
-                msg.HasOne(m => m.User)
-                    .WithMany(u => u.MessagesSent)
-                    .HasForeignKey(m => m.UserId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                vp.HasOne(p => p.User)
+                    .WithMany(u => u.VoiceParticipations)
+                    .HasForeignKey(p => p.UserId)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                vp.HasIndex(p => new { p.VoiceSessionId, p.UserId }).IsUnique();
             });
 
             // Example of optional seeding (you can re-enable later if needed)
