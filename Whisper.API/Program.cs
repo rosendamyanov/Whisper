@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Http;
 using Whisper.Authentication.Configuration;
 using Whisper.Authentication.Data;
 using Whisper.Authentication.Data.Interfaces;
@@ -24,6 +25,7 @@ namespace Whisper.Api
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+            builder.Services.AddHttpContextAccessor();
 
             // Add services to the container.
             // Repositories
@@ -41,6 +43,7 @@ namespace Whisper.Api
             builder.Services.AddScoped<IEmailValidation, EmailValidation>();
             builder.Services.AddScoped<IPasswordValidation, PasswordValidation>();
 
+            builder.Services.AddHttpContextAccessor();
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();

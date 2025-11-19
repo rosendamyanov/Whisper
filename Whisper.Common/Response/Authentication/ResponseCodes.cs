@@ -17,5 +17,9 @@
         public const string RefreshRevokeFailed = "REFRESH_REVOKE_FAILED";
         public const string RefreshAddFailed = "REFRESH_ADD_FAILED";
         public const string CredentialsSaveFailed = "CREDENTIALS_SAVE_FAILED";
+        public const string TokensMissing = "TOKENS_MISSING";
+        public const string InvalidRefreshTokenId = "INVALID_REFRESH_ID";
+        public const string FailedToRevokeToken = "REVOKE_FAILED";
+        public const string LoggedOut = "LOGGED_OUT";
     }
 }

@@ -6,6 +6,7 @@
         public const string UserRegistered = "User registered successfully.";
         public const string UserLogged = "Successfully logged in.";
         public const string TokenRefreshed = "Refresh token successfully refreshed.";
+        public const string LoggedOut = "Logged out successfully.";
 
         //Failure Messages
         public const string UsernameExists = "Username already exists.";
@@ -23,5 +24,8 @@
         public const string RefreshRevokeFailed = "Failed to revoke refresh token. Please try again later.";
         public const string RefreshAddFailed = "Failed to add refresh token. Please try again later.";
         public const string CredentialsSaveFailed = "Failed to save user credentials.";
+        public const string TokensMissing = "Access token or refresh token is missing.";
+        public const string InvalidRefreshTokenId = "Invalid RefreshTokenId format.";
+        public const string FailedToRevokeToken = "Failed to revoke the refresh token.";
     }
 }

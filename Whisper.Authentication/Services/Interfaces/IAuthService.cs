@@ -8,6 +8,7 @@ namespace Whisper.Authentication.Services.Interfaces
     {
         Task<ApiResponse<AuthResponseDto>> Register(UserRegisterRequestDTO user);
         Task<ApiResponse<AuthResponseDto>> Login(UserLoginRequestDTO requestUser);
-        Task<ApiResponse<AuthResponseDto>> RefreshToken(RefreshRequestDto refresh);
+        Task<ApiResponse<string>> Logout(LogoutRequestDTO? body = null);
+        Task<ApiResponse<AuthResponseDto>> RefreshToken(RefreshRequestDTO? refresh);
     }
 }

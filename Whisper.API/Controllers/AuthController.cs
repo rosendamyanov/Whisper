@@ -42,9 +42,20 @@ namespace Whisper.API.Controllers
         }
 
         [HttpPost("refresh")]
-        public async Task<IActionResult> RefreshToken(RefreshRequestDto refresh)
+        public async Task<IActionResult> RefreshToken(RefreshRequestDTO? refresh)
         {
             ApiResponse<AuthResponseDto> response = await _authService.RefreshToken(refresh);
+            if (response.IsSuccess)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
+
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout(LogoutRequestDTO? logoutRequestDto)
+        {
+            ApiResponse<string> response = await _authService.Logout(logoutRequestDto);
             if (response.IsSuccess)
             {
                 return Ok(response);

@@ -12,7 +12,7 @@ namespace Whisper.Authentication.Data.Interfaces
         Task<User?> GetUserByIdentifierAsync(string identifier);
         Task<User?> GetUserWithCredentialsByIdentifierAsync(string identifier);
         Task<User?> GetUserRefreshTokenAsync(string username);
-        Task<RefreshToken?> GetRefreshTokenByIdAsync(Guid refreshTokenId, Guid userId);
+        Task<RefreshToken?> GetRefreshTokenByIdAsync(Guid refreshTokenId, Guid? userId);
         Task<bool> SaveRevokedRefreshTokenAsync(RevokedToken revokedToken, RefreshToken refreshToken);
         Task<bool> SaveRefreshTokenAsync(RefreshToken refreshToken);
         Task<bool> SaveUserRefreshTokenAsync(User user);

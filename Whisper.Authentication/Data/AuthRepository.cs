@@ -74,9 +74,16 @@ namespace Whisper.Authentication.Data
                                  .FirstOrDefaultAsync(u => u.Username.Equals(username));
         }
 
-        public async Task<RefreshToken?> GetRefreshTokenByIdAsync(Guid refreshTokenId, Guid userId)
+        public async Task<RefreshToken?> GetRefreshTokenByIdAsync(Guid refreshTokenId, Guid? userId)
         {
-            return await _context.RefreshTokens.FirstOrDefaultAsync(rt => rt.Id == refreshTokenId && rt.UserId == userId);
+            if (userId.HasValue)
+            {
+                return await _context.RefreshTokens
+                    .FirstOrDefaultAsync(rt => rt.Id == refreshTokenId && rt.UserId == userId.Value);
+            }
+
+            return await _context.RefreshTokens
+                .FirstOrDefaultAsync(rt => rt.Id == refreshTokenId);
         }
 
         public async Task<bool> SaveRevokedRefreshTokenAsync(RevokedToken revokedToken, RefreshToken refreshToken)

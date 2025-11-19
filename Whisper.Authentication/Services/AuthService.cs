@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using Whisper.Authentication.Configuration;
 using Whisper.Authentication.Factory.Interfaces;
@@ -17,19 +18,25 @@ namespace Whisper.Authentication.Services
 {
     public class AuthService : IAuthService
     {
+        private const string AccessTokenCookie = "AccessToken";
+        private const string RefreshTokenCookie = "RefreshToken";
+        private const string RefreshTokenIdCookie = "RefreshTokenId";
+
         private readonly IAuthRepository _authRepository;
         private readonly IAuthFactory _authFactory;
         private readonly IEmailValidation _emailValidation;
         private readonly IPasswordValidation _passwordValidation;
         private readonly ITokenService _tokenService;
         private readonly IOptions<JwtSettings> _jwtSettings;
+        private readonly IHttpContextAccessor _httpContext;
         public AuthService(
             IAuthRepository userRepository,
             IAuthFactory userFactory,
             IEmailValidation emailValidation,
             IPasswordValidation passwordValidation,
             ITokenService tokenService,
-            IOptions<JwtSettings> jwtSettings)
+            IOptions<JwtSettings> jwtSettings,
+            IHttpContextAccessor httpContext)
         {
             _authRepository = userRepository;
             _authFactory = userFactory;
@@ -37,10 +44,11 @@ namespace Whisper.Authentication.Services
             _passwordValidation = passwordValidation;
             _tokenService = tokenService;
             _jwtSettings = jwtSettings;
-
+            _httpContext = httpContext;
         }
 
         //TO DO:
+        //1. Use HttpOnly and Secure cookies to store tokens
         //2. Logout/Token Revocation (POST /auth/logout)
         //3. Password Reset Flow (request + confirm endpoints)
         //4. Email Verification (POST /auth/verify-email)
@@ -63,7 +71,6 @@ namespace Whisper.Authentication.Services
             }
 
             (bool usernameExists, bool emailExists) = await _authRepository.CheckUserExistenceAsync(requestUser.Username, requestUser.Email);
-
             switch (true)
             {
                 case true when usernameExists:
@@ -74,13 +81,12 @@ namespace Whisper.Authentication.Services
                     return ApiResponse<AuthResponseDto>.Failure(ResponseMessages.UsernameAndEmailExists, ResponseCodes.UsernameAndEmailExists);
             }
 
-            string passwordHash = requestUser.Password = BCrypt.Net.BCrypt.HashPassword(requestUser.Password);
+            string passwordHash = BCrypt.Net.BCrypt.HashPassword(requestUser.Password);
             (User user, UserCredentials credentials) = _authFactory.Map(requestUser, passwordHash);
 
             using var transaction = await _authRepository.BeginTransactionAsync();
 
             bool isRegistrationSuccess = await _authRepository.AddUserAsync(user);
-
             if (!isRegistrationSuccess)
             {
                 await transaction.RollbackAsync();
@@ -88,7 +94,6 @@ namespace Whisper.Authentication.Services
             }
 
             bool isCredentialsSuccess = await _authRepository.SaveUserCredetialsAsync(credentials);
-
             if (!isCredentialsSuccess)
             {
                 await transaction.RollbackAsync();
@@ -98,7 +103,6 @@ namespace Whisper.Authentication.Services
             await transaction.CommitAsync();
 
             AuthResponseDto tokens = await GenerateAndAttachTokens(user);
-
             return ApiResponse<AuthResponseDto>.Success(tokens, ResponseMessages.UserRegistered);
         }
 
@@ -117,19 +121,62 @@ namespace Whisper.Authentication.Services
             }
 
             AuthResponseDto tokens = await GenerateAndAttachTokens(user);
-
-            await _authRepository.SaveUserRefreshTokenAsync(user);
-
             return ApiResponse<AuthResponseDto>.Success(tokens, ResponseMessages.UserLogged);
         }
 
-        public async Task<ApiResponse<AuthResponseDto>> RefreshToken(RefreshRequestDto refresh)
+        public async Task<ApiResponse<string>> Logout(LogoutRequestDTO? body = null)
         {
-            ClaimsPrincipal principal;
+            var request = _httpContext.HttpContext!.Request;
+            var response = _httpContext.HttpContext.Response;
 
+            string? refreshIdStr = body?.RefreshTokenId?.ToString() ?? request.Cookies[RefreshTokenIdCookie];
+            string? refreshTokenRaw = body?.RefreshToken ?? request.Cookies[RefreshTokenCookie];
+
+            if (string.IsNullOrEmpty(refreshIdStr) || string.IsNullOrEmpty(refreshTokenRaw))
+                return ApiResponse<string>.Failure(ResponseMessages.TokensMissing, ResponseCodes.TokensMissing);
+
+            if (!Guid.TryParse(refreshIdStr, out Guid refreshId))
+                return ApiResponse<string>.Failure(ResponseMessages.InvalidRefreshTokenId, ResponseCodes.InvalidRefreshTokenId);
+
+            RefreshToken? stored = await _authRepository.GetRefreshTokenByIdAsync(refreshId, null);
+
+            if (stored != null)
+            {
+                bool revoked = await RevokeRefreshToken(stored);
+                if (!revoked)
+                    return ApiResponse<string>.Failure(ResponseMessages.FailedToRevokeToken, ResponseCodes.InvalidRefreshTokenId);
+            }
+
+            DeleteAuthCookies(response);
+
+            return ApiResponse<string>.Success(ResponseMessages.LoggedOut);
+        }
+
+        public async Task<ApiResponse<AuthResponseDto>> RefreshToken(RefreshRequestDTO? refresh = null)
+        {
+            string? accessToken = refresh?.AccessToken;
+            string? refreshTokenRaw = refresh?.RefreshToken;
+            Guid? refreshTokenId = refresh?.RefreshTokenId;
+
+            if (accessToken == null || refreshTokenRaw == null || refreshTokenId == null)
+            {
+                var request = _httpContext.HttpContext!.Request;
+                accessToken ??= request.Cookies[AccessTokenCookie];
+                refreshTokenRaw ??= request.Cookies[RefreshTokenCookie];
+
+                var refreshIdStr = request.Cookies[RefreshTokenIdCookie];
+                if (refreshTokenId == null && Guid.TryParse(refreshIdStr, out Guid parsed))
+                    refreshTokenId = parsed;
+            }
+
+            if (string.IsNullOrEmpty(accessToken) || string.IsNullOrEmpty(refreshTokenRaw) || refreshTokenId == null)
+                return ApiResponse<AuthResponseDto>.Failure(ResponseMessages.TokensMissing, ResponseCodes.TokensMissing);
+
+
+            ClaimsPrincipal principal;
             try
             {
-                principal = _tokenService.GetPrincipalFromToken(refresh.AccessToken);
+                principal = _tokenService.GetPrincipalFromToken(accessToken);
             }
             catch (SecurityTokenException)
             {
@@ -137,45 +184,28 @@ namespace Whisper.Authentication.Services
             }
 
             var username = principal.Identity?.Name;
-
             if (username == null)
-            {
                 return ApiResponse<AuthResponseDto>.Failure(ResponseMessages.UsernameNotFound, ResponseCodes.UsernameNotFound);
-            }
 
             User? user = await _authRepository.GetUserRefreshTokenAsync(username);
-
             if (user == null)
-            {
                 return ApiResponse<AuthResponseDto>.Failure(ResponseMessages.UserNotFound, ResponseCodes.UserNotFound);
-            }
 
-            RefreshToken? storedRefreshToken = await _authRepository.GetRefreshTokenByIdAsync(refresh.RefreshTokenId, user.Id);
-
+            RefreshToken? storedRefreshToken = await _authRepository.GetRefreshTokenByIdAsync(refreshTokenId.Value, user.Id);
             if (storedRefreshToken == null || storedRefreshToken.IsRevoked || storedRefreshToken.ExpiresAt <= DateTime.UtcNow)
-            {
                 return ApiResponse<AuthResponseDto>.Failure(ResponseMessages.RefreshIsRevokedOrExpired, ResponseCodes.RefreshIsRevokedOrExpired);
-            }
 
-            if (!BCrypt.Net.BCrypt.Verify(refresh.RefreshToken, storedRefreshToken.TokenHash))
-            {
+            if (!BCrypt.Net.BCrypt.Verify(refreshTokenRaw, storedRefreshToken.TokenHash))
                 return ApiResponse<AuthResponseDto>.Failure(ResponseMessages.RefreshNotFound, ResponseCodes.RefreshNotFound);
-            }
 
-            storedRefreshToken.IsRevoked = true;
 
-            RevokedToken revokedToken = _authFactory.Map(storedRefreshToken);
-
-            bool result = await _authRepository.SaveRevokedRefreshTokenAsync(revokedToken, storedRefreshToken);
-
-            if (!result)
-            {
+            bool revokeResult = await RevokeRefreshToken(storedRefreshToken);
+            if (!revokeResult)
                 return ApiResponse<AuthResponseDto>.Failure(ResponseMessages.RefreshRevokeFailed, ResponseCodes.RefreshRevokeFailed);
-            }
 
-            AuthResponseDto tokens = await GenerateAndAttachTokens(user);
 
-            return ApiResponse<AuthResponseDto>.Success(tokens, ResponseMessages.TokenRefreshed);
+            AuthResponseDto newTokens = await GenerateAndAttachTokens(user);
+            return ApiResponse<AuthResponseDto>.Success(newTokens, ResponseMessages.TokenRefreshed);
         }
 
         private async Task<AuthResponseDto> GenerateAndAttachTokens(User user)
@@ -187,6 +217,18 @@ namespace Whisper.Authentication.Services
             refreshToken.UserId = user.Id;
             await _authRepository.SaveRefreshTokenAsync(refreshToken);
 
+            var response = _httpContext.HttpContext!.Response;
+
+            response.Cookies.Append(AccessTokenCookie, 
+                                    accessToken, 
+                                    CookieConfig.Build(_jwtSettings.Value.AccessTokenExpirationMinutes));
+            response.Cookies.Append(RefreshTokenCookie, 
+                                    rawRefreshToken, 
+                                    CookieConfig.Build(_jwtSettings.Value.RefreshTokenExpirationDays * 24 * 60));
+            response.Cookies.Append(RefreshTokenIdCookie, 
+                                    refreshToken.Id.ToString(), 
+                                    CookieConfig.Build(_jwtSettings.Value.RefreshTokenExpirationDays * 24 * 60));
+
             AuthResponseDto tokens = _authFactory.Map(
                 accessToken,
                 rawRefreshToken,
@@ -194,6 +236,21 @@ namespace Whisper.Authentication.Services
                 DateTime.UtcNow.AddMinutes(_jwtSettings.Value.AccessTokenExpirationMinutes));
 
             return tokens;
+        }
+
+        private async Task<bool> RevokeRefreshToken(RefreshToken refreshToken)
+        {
+            refreshToken.IsRevoked = true;
+            RevokedToken revokedToken = _authFactory.Map(refreshToken);
+    
+            return await _authRepository.SaveRevokedRefreshTokenAsync(revokedToken, refreshToken);
+        }
+
+        private void DeleteAuthCookies(HttpResponse response)
+        {
+            response.Cookies.Delete(AccessTokenCookie);
+            response.Cookies.Delete(RefreshTokenCookie);
+            response.Cookies.Delete(RefreshTokenIdCookie);
         }
     }
 }
