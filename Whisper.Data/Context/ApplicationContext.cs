@@ -131,28 +131,6 @@ namespace Whisper.Data.Context
 
                 vp.HasIndex(p => new { p.VoiceSessionId, p.UserId }).IsUnique();
             });
-
-            // Example of optional seeding (you can re-enable later if needed)
-            /*
-            var seededUserId = Guid.Parse("a1b2c3d4-1234-5678-9012-abcdef123456");
-
-            modelBuilder.Entity<User>().HasData(new User
-            {
-                Id = seededUserId,
-                Username = "test",
-                Email = "test@test.com",
-                CreatedAt = DateTime.Parse("2025-03-31 13:42:21"),
-                Role = "User"
-            });
-
-            modelBuilder.Entity<UserCredentials>().HasData(new UserCredentials
-            {
-                Id = Guid.NewGuid(),
-                UserId = seededUserId,
-                PasswordHash = "$2a$...hash...",
-                CreatedAt = DateTime.UtcNow
-            });
-            */
         }
     }
 }

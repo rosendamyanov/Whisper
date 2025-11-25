@@ -48,8 +48,6 @@ namespace Whisper.Authentication.Services
         }
 
         //TO DO:
-        //1. Use HttpOnly and Secure cookies to store tokens
-        //2. Logout/Token Revocation (POST /auth/logout)
         //3. Password Reset Flow (request + confirm endpoints)
         //4. Email Verification (POST /auth/verify-email)
         //5. Session Management (list/revoke sessions)
@@ -73,12 +71,12 @@ namespace Whisper.Authentication.Services
             (bool usernameExists, bool emailExists) = await _authRepository.CheckUserExistenceAsync(requestUser.Username, requestUser.Email);
             switch (true)
             {
+                case true when usernameExists && emailExists:
+                    return ApiResponse<AuthResponseDto>.Failure(ResponseMessages.UsernameAndEmailExists, ResponseCodes.UsernameAndEmailExists);
                 case true when usernameExists:
                     return ApiResponse<AuthResponseDto>.Failure(ResponseMessages.UsernameExists, ResponseCodes.UsernameExists);
                 case true when emailExists:
                     return ApiResponse<AuthResponseDto>.Failure(ResponseMessages.EmailExists, ResponseCodes.EmailExists);
-                case true when usernameExists && emailExists:
-                    return ApiResponse<AuthResponseDto>.Failure(ResponseMessages.UsernameAndEmailExists, ResponseCodes.UsernameAndEmailExists);
             }
 
             string passwordHash = BCrypt.Net.BCrypt.HashPassword(requestUser.Password);
