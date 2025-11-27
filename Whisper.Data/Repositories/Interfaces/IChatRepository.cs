@@ -4,7 +4,7 @@ namespace Whisper.Data.Repositories.Interfaces
 {
     public interface IChatRepository
     {
-        Task<bool> AddMessageToChatAsync(Guid chatId, Message message);
+        Task<Message> CreateMessageAsync(Message message);
         Task<bool> AddUserToChatAsync(Guid chatId, Guid userId);
         Task<Chat> CreateChatAsync(Chat chat);
         Task<Chat?> GetChatByIdAsync(Guid chatId);

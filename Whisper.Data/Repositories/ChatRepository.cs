@@ -74,17 +74,16 @@ namespace Whisper.Data.Repositories
 
         // ====== Message Management ======
 
-        public async Task<bool> AddMessageToChatAsync(Guid chatId, Message message)
+        public async Task<Message> CreateMessageAsync(Message message)
         {
-            Chat? chat = await _context.Chats
-                .Include(c => c.Messages)
-                .FirstOrDefaultAsync(c => c.Id == chatId);
+            _context.Messages.Add(message);
+            await _context.SaveChangesAsync();
 
-            if (chat == null)
-                return false;
+            await _context.Entry(message)
+                .Reference(m => m.User)
+                .LoadAsync();
 
-            chat.Messages.Add(message);
-            return await _context.SaveChangesAsync() > 0;
+            return message;
         }
 
         public async Task<List<Message>> GetChatMessagesAsync(Guid chatId, int limit, DateTime? before)

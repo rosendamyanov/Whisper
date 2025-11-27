@@ -1,6 +1,6 @@
 ﻿namespace Whisper.Common.Response.Authentication
 {
-    public static class ResponseMessages
+    public static class AuthMessages
     {
         //Success Messages
         public const string UserRegistered = "User registered successfully.";

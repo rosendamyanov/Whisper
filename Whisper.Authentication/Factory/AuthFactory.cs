@@ -3,7 +3,10 @@ using Whisper.Authentication.DTOs.Request;
 using Whisper.Authentication.DTOs.Response;
 using Whisper.Data.Models;
 using Whisper.Data.Models.Authentication;
-using Whisper.Common.Messages;
+using Whisper.Common.Response.Authentication;
+{
+    
+}
 
 namespace Whisper.Authentication.Factory
 {
@@ -38,7 +41,7 @@ namespace Whisper.Authentication.Factory
                 Id = Guid.NewGuid(),
                 TokenHash = refreshToken.TokenHash,
                 RevokedAt = DateTime.UtcNow,
-                Reason = Messages.tokenRefreshed,
+                Reason = AuthMessages.TokenRefreshed,
                 UserId = refreshToken.UserId,
                 User = refreshToken.User
             };

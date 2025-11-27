@@ -1,6 +1,6 @@
 ﻿namespace Whisper.Common.Response.Authentication
 {
-    public static class ResponseCodes
+    public static class AuthCodes
     {
         public const string UsernameExists = "USERNAME_EXISTS";
         public const string UsernameNotFound = "USERNAME_NOT_FOUND";

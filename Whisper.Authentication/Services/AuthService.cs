@@ -60,23 +60,23 @@ namespace Whisper.Authentication.Services
         {
             if (!_emailValidation.IsEmailValid(requestUser.Email))
             {
-                return ApiResponse<AuthResponseDto>.Failure(ResponseMessages.InvalidEmail, ResponseCodes.InvalidEmail);
+                return ApiResponse<AuthResponseDto>.Failure(AuthMessages.InvalidEmail, AuthCodes.InvalidEmail);
             }
 
             if (!_passwordValidation.IsStrong(requestUser.Password))
             {
-                return ApiResponse<AuthResponseDto>.Failure(ResponseMessages.WeakPassword, ResponseCodes.WeakPassword);
+                return ApiResponse<AuthResponseDto>.Failure(AuthMessages.WeakPassword, AuthCodes.WeakPassword);
             }
 
             (bool usernameExists, bool emailExists) = await _authRepository.CheckUserExistenceAsync(requestUser.Username, requestUser.Email);
             switch (true)
             {
                 case true when usernameExists && emailExists:
-                    return ApiResponse<AuthResponseDto>.Failure(ResponseMessages.UsernameAndEmailExists, ResponseCodes.UsernameAndEmailExists);
+                    return ApiResponse<AuthResponseDto>.Failure(AuthMessages.UsernameAndEmailExists, AuthCodes.UsernameAndEmailExists);
                 case true when usernameExists:
-                    return ApiResponse<AuthResponseDto>.Failure(ResponseMessages.UsernameExists, ResponseCodes.UsernameExists);
+                    return ApiResponse<AuthResponseDto>.Failure(AuthMessages.UsernameExists, AuthCodes.UsernameExists);
                 case true when emailExists:
-                    return ApiResponse<AuthResponseDto>.Failure(ResponseMessages.EmailExists, ResponseCodes.EmailExists);
+                    return ApiResponse<AuthResponseDto>.Failure(AuthMessages.EmailExists, AuthCodes.EmailExists);
             }
 
             string passwordHash = BCrypt.Net.BCrypt.HashPassword(requestUser.Password);
@@ -88,20 +88,20 @@ namespace Whisper.Authentication.Services
             if (!isRegistrationSuccess)
             {
                 await transaction.RollbackAsync();
-                return ApiResponse<AuthResponseDto>.Failure(ResponseMessages.RegistrationFailed, ResponseCodes.RegistrationFailed);
+                return ApiResponse<AuthResponseDto>.Failure(AuthMessages.RegistrationFailed, AuthCodes.RegistrationFailed);
             }
 
             bool isCredentialsSuccess = await _authRepository.SaveUserCredetialsAsync(credentials);
             if (!isCredentialsSuccess)
             {
                 await transaction.RollbackAsync();
-                return ApiResponse<AuthResponseDto>.Failure(ResponseMessages.CredentialsSaveFailed, ResponseCodes.CredentialsSaveFailed);
+                return ApiResponse<AuthResponseDto>.Failure(AuthMessages.CredentialsSaveFailed, AuthCodes.CredentialsSaveFailed);
             }
 
             await transaction.CommitAsync();
 
             AuthResponseDto tokens = await GenerateAndAttachTokens(user);
-            return ApiResponse<AuthResponseDto>.Success(tokens, ResponseMessages.UserRegistered);
+            return ApiResponse<AuthResponseDto>.Success(tokens, AuthMessages.UserRegistered);
         }
 
         public async Task<ApiResponse<AuthResponseDto>> Login(UserLoginRequestDTO requestUser)
@@ -110,16 +110,16 @@ namespace Whisper.Authentication.Services
 
             if (user == null || user.Credentials == null)
             {
-                return ApiResponse<AuthResponseDto>.Failure(ResponseMessages.UserNotFound, ResponseCodes.UserNotFound);
+                return ApiResponse<AuthResponseDto>.Failure(AuthMessages.UserNotFound, AuthCodes.UserNotFound);
             }
 
             if (!BCrypt.Net.BCrypt.Verify(requestUser.Password, user.Credentials.PasswordHash))
             {
-                return ApiResponse<AuthResponseDto>.Failure(ResponseMessages.InvalidCredentials, ResponseCodes.InvalidCredentials);
+                return ApiResponse<AuthResponseDto>.Failure(AuthMessages.InvalidCredentials, AuthCodes.InvalidCredentials);
             }
 
             AuthResponseDto tokens = await GenerateAndAttachTokens(user);
-            return ApiResponse<AuthResponseDto>.Success(tokens, ResponseMessages.UserLogged);
+            return ApiResponse<AuthResponseDto>.Success(tokens, AuthMessages.UserLogged);
         }
 
         public async Task<ApiResponse<string>> Logout(LogoutRequestDTO? body = null)
@@ -131,10 +131,10 @@ namespace Whisper.Authentication.Services
             string? refreshTokenRaw = body?.RefreshToken ?? request.Cookies[RefreshTokenCookie];
 
             if (string.IsNullOrEmpty(refreshIdStr) || string.IsNullOrEmpty(refreshTokenRaw))
-                return ApiResponse<string>.Failure(ResponseMessages.TokensMissing, ResponseCodes.TokensMissing);
+                return ApiResponse<string>.Failure(AuthMessages.TokensMissing, AuthCodes.TokensMissing);
 
             if (!Guid.TryParse(refreshIdStr, out Guid refreshId))
-                return ApiResponse<string>.Failure(ResponseMessages.InvalidRefreshTokenId, ResponseCodes.InvalidRefreshTokenId);
+                return ApiResponse<string>.Failure(AuthMessages.InvalidRefreshTokenId, AuthCodes.InvalidRefreshTokenId);
 
             RefreshToken? stored = await _authRepository.GetRefreshTokenByIdAsync(refreshId, null);
 
@@ -142,12 +142,12 @@ namespace Whisper.Authentication.Services
             {
                 bool revoked = await RevokeRefreshToken(stored);
                 if (!revoked)
-                    return ApiResponse<string>.Failure(ResponseMessages.FailedToRevokeToken, ResponseCodes.InvalidRefreshTokenId);
+                    return ApiResponse<string>.Failure(AuthMessages.FailedToRevokeToken, AuthCodes.InvalidRefreshTokenId);
             }
 
             DeleteAuthCookies(response);
 
-            return ApiResponse<string>.Success(ResponseMessages.LoggedOut);
+            return ApiResponse<string>.Success(AuthMessages.LoggedOut);
         }
 
         public async Task<ApiResponse<AuthResponseDto>> RefreshToken(RefreshRequestDTO? refresh = null)
@@ -168,7 +168,7 @@ namespace Whisper.Authentication.Services
             }
 
             if (string.IsNullOrEmpty(accessToken) || string.IsNullOrEmpty(refreshTokenRaw) || refreshTokenId == null)
-                return ApiResponse<AuthResponseDto>.Failure(ResponseMessages.TokensMissing, ResponseCodes.TokensMissing);
+                return ApiResponse<AuthResponseDto>.Failure(AuthMessages.TokensMissing, AuthCodes.TokensMissing);
 
 
             ClaimsPrincipal principal;
@@ -178,32 +178,32 @@ namespace Whisper.Authentication.Services
             }
             catch (SecurityTokenException)
             {
-                return ApiResponse<AuthResponseDto>.Failure(ResponseMessages.InvalidAccessToken, ResponseCodes.InvalidAccessToken);
+                return ApiResponse<AuthResponseDto>.Failure(AuthMessages.InvalidAccessToken, AuthCodes.InvalidAccessToken);
             }
 
             var username = principal.Identity?.Name;
             if (username == null)
-                return ApiResponse<AuthResponseDto>.Failure(ResponseMessages.UsernameNotFound, ResponseCodes.UsernameNotFound);
+                return ApiResponse<AuthResponseDto>.Failure(AuthMessages.UsernameNotFound, AuthCodes.UsernameNotFound);
 
             User? user = await _authRepository.GetUserRefreshTokenAsync(username);
             if (user == null)
-                return ApiResponse<AuthResponseDto>.Failure(ResponseMessages.UserNotFound, ResponseCodes.UserNotFound);
+                return ApiResponse<AuthResponseDto>.Failure(AuthMessages.UserNotFound, AuthCodes.UserNotFound);
 
             RefreshToken? storedRefreshToken = await _authRepository.GetRefreshTokenByIdAsync(refreshTokenId.Value, user.Id);
             if (storedRefreshToken == null || storedRefreshToken.IsRevoked || storedRefreshToken.ExpiresAt <= DateTime.UtcNow)
-                return ApiResponse<AuthResponseDto>.Failure(ResponseMessages.RefreshIsRevokedOrExpired, ResponseCodes.RefreshIsRevokedOrExpired);
+                return ApiResponse<AuthResponseDto>.Failure(AuthMessages.RefreshIsRevokedOrExpired, AuthCodes.RefreshIsRevokedOrExpired);
 
             if (!BCrypt.Net.BCrypt.Verify(refreshTokenRaw, storedRefreshToken.TokenHash))
-                return ApiResponse<AuthResponseDto>.Failure(ResponseMessages.RefreshNotFound, ResponseCodes.RefreshNotFound);
+                return ApiResponse<AuthResponseDto>.Failure(AuthMessages.RefreshNotFound, AuthCodes.RefreshNotFound);
 
 
             bool revokeResult = await RevokeRefreshToken(storedRefreshToken);
             if (!revokeResult)
-                return ApiResponse<AuthResponseDto>.Failure(ResponseMessages.RefreshRevokeFailed, ResponseCodes.RefreshRevokeFailed);
+                return ApiResponse<AuthResponseDto>.Failure(AuthMessages.RefreshRevokeFailed, AuthCodes.RefreshRevokeFailed);
 
 
             AuthResponseDto newTokens = await GenerateAndAttachTokens(user);
-            return ApiResponse<AuthResponseDto>.Success(newTokens, ResponseMessages.TokenRefreshed);
+            return ApiResponse<AuthResponseDto>.Success(newTokens, AuthMessages.TokenRefreshed);
         }
 
         private async Task<AuthResponseDto> GenerateAndAttachTokens(User user)
