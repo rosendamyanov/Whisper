@@ -16,6 +16,9 @@ using Whisper.Data.Models.Authentication;
 
 namespace Whisper.Authentication.Services
 {
+    /// <summary>
+    /// Implements authentication business logic with JWT-based token management and dual-mode delivery (cookies + JSON)
+    /// </summary>
     public class AuthService : IAuthService
     {
         private const string AccessTokenCookie = "AccessToken";
@@ -56,6 +59,7 @@ namespace Whisper.Authentication.Services
         //9. Logging Erros in .log files or app console for easier debugging and monitoring
         //10. Implement memory caching for username, email and tokens(to reduce db calls).
 
+        /// <inheritdoc />
         public async Task<ApiResponse<AuthResponseDto>> Register(UserRegisterRequestDTO requestUser)
         {
             if (!_emailValidation.IsEmailValid(requestUser.Email))
@@ -104,6 +108,7 @@ namespace Whisper.Authentication.Services
             return ApiResponse<AuthResponseDto>.Success(tokens, AuthMessages.UserRegistered);
         }
 
+        /// <inheritdoc />
         public async Task<ApiResponse<AuthResponseDto>> Login(UserLoginRequestDTO requestUser)
         {
             User? user = await _authRepository.GetUserWithCredentialsByIdentifierAsync(requestUser.Username);
@@ -122,6 +127,7 @@ namespace Whisper.Authentication.Services
             return ApiResponse<AuthResponseDto>.Success(tokens, AuthMessages.UserLogged);
         }
 
+        /// <inheritdoc />
         public async Task<ApiResponse<string>> Logout(LogoutRequestDTO? body = null)
         {
             var request = _httpContext.HttpContext!.Request;
@@ -150,6 +156,7 @@ namespace Whisper.Authentication.Services
             return ApiResponse<string>.Success(AuthMessages.LoggedOut);
         }
 
+        /// <inheritdoc />
         public async Task<ApiResponse<AuthResponseDto>> RefreshToken(RefreshRequestDTO? refresh = null)
         {
             string? accessToken = refresh?.AccessToken;
@@ -206,6 +213,11 @@ namespace Whisper.Authentication.Services
             return ApiResponse<AuthResponseDto>.Success(newTokens, AuthMessages.TokenRefreshed);
         }
 
+        /// <summary>
+        /// Generates JWT access and refresh tokens, saves refresh token to database, and attaches as HttpOnly cookies
+        /// </summary>
+        /// <param name="user">User to generate tokens for</param>
+        /// <returns>AuthResponseDto containing both tokens and expiration time</returns>
         private async Task<AuthResponseDto> GenerateAndAttachTokens(User user)
         {
             string accessToken = _tokenService.GenerateAccessToken(user);
@@ -236,6 +248,11 @@ namespace Whisper.Authentication.Services
             return tokens;
         }
 
+        /// <summary>
+        /// Marks a refresh token as revoked and stores it in the revoked tokens table
+        /// </summary>
+        /// <param name="refreshToken">The refresh token to revoke</param>
+        /// <returns>True if revocation succeeded, false otherwise</returns>
         private async Task<bool> RevokeRefreshToken(RefreshToken refreshToken)
         {
             refreshToken.IsRevoked = true;
@@ -244,6 +261,10 @@ namespace Whisper.Authentication.Services
             return await _authRepository.SaveRevokedRefreshTokenAsync(revokedToken, refreshToken);
         }
 
+        /// <summary>
+        /// Deletes all authentication cookies from the response
+        /// </summary>
+        /// <param name="response">HTTP response to delete cookies from</param>
         private void DeleteAuthCookies(HttpResponse response)
         {
             response.Cookies.Delete(AccessTokenCookie);

@@ -18,6 +18,7 @@ namespace Whisper.Authentication.Services
         public TokenService(IOptions<JwtSettings> settings)
             => _settings = settings.Value;
 
+        /// <inheritdoc />
         public string GenerateAccessToken(User user)
         {
             var claims = new[]
@@ -42,6 +43,7 @@ namespace Whisper.Authentication.Services
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
+        /// <inheritdoc />
         public (string RawToken, RefreshToken HashedToken) GenerateRefreshToken()
         {
             var rawToken = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
@@ -60,11 +62,13 @@ namespace Whisper.Authentication.Services
             );
         }
 
+        /// <inheritdoc />
         public bool ValidateRefreshToken(string rawToken, RefreshToken storedToken)
         {
             return BCrypt.Net.BCrypt.Verify(rawToken, storedToken.TokenHash);
         }
 
+        /// <inheritdoc />
         public ClaimsPrincipal GetPrincipalFromToken(string token)
         {
             var validator = new JwtSecurityTokenHandler();

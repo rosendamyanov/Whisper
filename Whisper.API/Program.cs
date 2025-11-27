@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 using Whisper.Authentication.Configuration;
 using Whisper.Authentication.Data;
 using Whisper.Authentication.Data.Interfaces;
@@ -63,6 +65,18 @@ namespace Whisper.Api
                     Type = SecuritySchemeType.Http,
                     Scheme = "bearer"
                 });
+
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "Whisper API",
+                    Version = "v1",
+                    Description = "Real-time communication API for Whisper application"
+                });
+
+                // Include XML comments
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
             });
 
             var app = builder.Build();

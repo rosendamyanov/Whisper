@@ -8,6 +8,9 @@ using Whisper.Services.Services.Interfaces;
 
 namespace Whisper.Services
 {
+    /// <summary>
+    /// Implements chat business logic including validation, authorization, and data orchestration
+    /// </summary>
     public class ChatService : IChatService
     {
         private readonly IChatRepository _chatRepository;
@@ -19,6 +22,7 @@ namespace Whisper.Services
             _chatFactory = chatFactory;
         }
 
+        /// <inheritdoc />
         public async Task<ApiResponse<ChatResponseDTO>> GetOrCreateDirectChatAsync(Guid currentUserId, Guid friendId)
         {
             if (currentUserId == friendId)
@@ -41,6 +45,7 @@ namespace Whisper.Services
             return ApiResponse<ChatResponseDTO>.Success(_chatFactory.MapToDto(newChat));
         }
 
+        /// <inheritdoc />
         public async Task<ApiResponse<ChatResponseDTO>> CreateGroupChatAsync(Guid currentUser, CreateGroupChatRequestDTO request)
         {
             if (request.GroupName == null)
@@ -62,6 +67,7 @@ namespace Whisper.Services
             return ApiResponse<ChatResponseDTO>.Success(_chatFactory.MapToDto(groupChat));
         }
 
+        /// <inheritdoc />
         public async Task<ApiResponse<MessageResponseDTO>> SendMessageAsync(Guid userId, SendMessageRequestDTO request)
         {
             if (string.IsNullOrEmpty(request.Content))
@@ -78,6 +84,7 @@ namespace Whisper.Services
             return ApiResponse<MessageResponseDTO>.Success(_chatFactory.MapToDto(savedMessage));
         }
 
+        /// <inheritdoc />
         public async Task<ApiResponse<List<MessageResponseDTO>>> GetChatMessagesAsync(Guid chatId, Guid userId, int limit = 50, DateTime? before = null)
         {
             bool isInChat = await _chatRepository.IsUserInChatAsync(chatId, userId);
@@ -89,6 +96,7 @@ namespace Whisper.Services
             return ApiResponse<List<MessageResponseDTO>>.Success(_chatFactory.MapToDto(messages));
         }
 
+        /// <inheritdoc />
         public async Task<ApiResponse<List<ChatResponseDTO>>> GetUserChatsAsync(Guid userId)
         {
             var chats = await _chatRepository.GetUserChatsAsync(userId);
