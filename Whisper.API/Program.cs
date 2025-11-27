@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using Microsoft.AspNetCore.Http;
 using Whisper.Authentication.Configuration;
 using Whisper.Authentication.Data;
 using Whisper.Authentication.Data.Interfaces;
@@ -11,6 +10,12 @@ using Whisper.Authentication.Services.Interfaces;
 using Whisper.Authentication.Validation;
 using Whisper.Authentication.Validation.Interfaces;
 using Whisper.Data.Context;
+using Whisper.Data.Repositories;
+using Whisper.Data.Repositories.Interfaces;
+using Whisper.Services;
+using Whisper.Services.Factories.ChatFactory;
+using Whisper.Services.Factories.Interfaces;
+using Whisper.Services.Services.Interfaces;
 
 namespace Whisper.Api
 {
@@ -30,14 +35,17 @@ namespace Whisper.Api
             // Add services to the container.
             // Repositories
             builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+            builder.Services.AddScoped<IChatRepository, ChatRepository>();
 
 
             // Services
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<ITokenService, TokenService>();
+            builder.Services.AddScoped<IChatService, ChatService>();
 
             // Factories
             builder.Services.AddScoped<IAuthFactory, AuthFactory>();
+            builder.Services.AddScoped<IChatFactory, ChatFactory>();
 
             // Validators
             builder.Services.AddScoped<IEmailValidation, EmailValidation>();

@@ -4,9 +4,6 @@ using Whisper.Authentication.DTOs.Response;
 using Whisper.Data.Models;
 using Whisper.Data.Models.Authentication;
 using Whisper.Common.Response.Authentication;
-{
-    
-}
 
 namespace Whisper.Authentication.Factory
 {
