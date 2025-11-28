@@ -12,7 +12,7 @@
 
         public bool IsAccepted { get; set; } = false;
 
-        public bool IsBlocked { get; set; } = false;
+        public bool IsBlocked { get; set; } = false; //TO BE REMOVED IN FUTURE UPDATES
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? AcceptedAt { get; set; }
