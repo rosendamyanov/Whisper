@@ -95,7 +95,7 @@ namespace Whisper.Authentication.Services
                 return ApiResponse<AuthResponseDto>.Failure(AuthMessages.RegistrationFailed, AuthCodes.RegistrationFailed);
             }
 
-            bool isCredentialsSuccess = await _authRepository.SaveUserCredetialsAsync(credentials);
+            bool isCredentialsSuccess = await _authRepository.SaveUserCredentialsAsync(credentials);
             if (!isCredentialsSuccess)
             {
                 await transaction.RollbackAsync();

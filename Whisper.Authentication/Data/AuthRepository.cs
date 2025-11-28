@@ -31,6 +31,7 @@ namespace Whisper.Authentication.Data
         {
 
             var matches = await _context.Users
+               .IgnoreQueryFilters()
                .Where(u => u.Username == username || u.Email == email)
                .Select(u => new
                {
@@ -52,7 +53,7 @@ namespace Whisper.Authentication.Data
                                  .FirstOrDefaultAsync(u => u.Username == identifier || u.Email == identifier);
         }
 
-        public async Task<bool> SaveUserCredetialsAsync(UserCredentials userCredentials)
+        public async Task<bool> SaveUserCredentialsAsync(UserCredentials userCredentials)
         {
             _context.Add(userCredentials);
             return await _context.SaveChangesAsync() > 0;

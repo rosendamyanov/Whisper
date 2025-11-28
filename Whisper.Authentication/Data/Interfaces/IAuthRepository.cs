@@ -16,7 +16,7 @@ namespace Whisper.Authentication.Data.Interfaces
         Task<bool> SaveRevokedRefreshTokenAsync(RevokedToken revokedToken, RefreshToken refreshToken);
         Task<bool> SaveRefreshTokenAsync(RefreshToken refreshToken);
         Task<bool> SaveUserRefreshTokenAsync(User user);
-        Task<bool> SaveUserCredetialsAsync(UserCredentials userCredentials);
+        Task<bool> SaveUserCredentialsAsync(UserCredentials userCredentials);
 
     }
 }

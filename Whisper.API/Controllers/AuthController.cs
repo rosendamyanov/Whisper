@@ -42,14 +42,14 @@ namespace Whisper.API.Controllers
         /// <param name="user">Login credentials (username/email and password)</param>
         /// <returns>JWT access token and refresh token on success</returns>
         /// <response code="200">Login successful, tokens returned</response>
-        /// <response code="400">Login failed due to invalid credentials</response>
+        /// <response code="401">Login failed due to invalid credentials</response>
         [HttpPost("login")]
         [ProducesResponseType(typeof(ApiResponse<AuthResponseDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse<AuthResponseDto>), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Login(UserLoginRequestDTO user)
         {
             ApiResponse<AuthResponseDto> response = await _authService.Login(user);
-            return response.IsSuccess ? Ok(response) : BadRequest(response);
+            return response.IsSuccess ? Ok(response) : Unauthorized(response);
         }
 
         /// <summary>
@@ -58,14 +58,14 @@ namespace Whisper.API.Controllers
         /// <param name="refresh">Optional refresh token details (can also use cookies)</param>
         /// <returns>New JWT access token and refresh token</returns>
         /// <response code="200">Tokens successfully refreshed</response>
-        /// <response code="400">Refresh failed due to invalid or expired refresh token</response>
+        /// <response code="401">Refresh failed due to invalid or expired refresh token</response>
         [HttpPost("refresh")]
         [ProducesResponseType(typeof(ApiResponse<AuthResponseDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse<AuthResponseDto>), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> RefreshToken(RefreshRequestDTO? refresh)
         {
             ApiResponse<AuthResponseDto> response = await _authService.RefreshToken(refresh);
-            return response.IsSuccess ? Ok(response) : BadRequest(response);
+            return response.IsSuccess ? Ok(response) : Unauthorized(response);
         }
 
         /// <summary>
@@ -74,14 +74,14 @@ namespace Whisper.API.Controllers
         /// <param name="logoutRequestDto">Optional logout details (can also use cookies)</param>
         /// <returns>Success message on logout</returns>
         /// <response code="200">User successfully logged out</response>
-        /// <response code="400">Logout failed due to missing or invalid tokens</response>
+        /// <response code="401">Logout failed due to missing or invalid tokens</response>
         [HttpPost("logout")]
         [ProducesResponseType(typeof(ApiResponse<string>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse<string>), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Logout(LogoutRequestDTO? logoutRequestDto)
         {
             ApiResponse<string> response = await _authService.Logout(logoutRequestDto);
-            return response.IsSuccess ? Ok(response) : BadRequest(response);
+            return response.IsSuccess ? Ok(response) : Unauthorized(response);
         }
     }
 }
