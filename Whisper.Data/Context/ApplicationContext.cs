@@ -53,6 +53,9 @@ namespace Whisper.Data.Context
                     .WithOne(m => m.User)
                     .HasForeignKey(m => m.UserId)
                     .OnDelete(DeleteBehavior.Restrict);
+
+                user.HasQueryFilter(u => !u.IsDeleted);
+
             });
 
             // FRIENDSHIPS
@@ -69,6 +72,8 @@ namespace Whisper.Data.Context
                  .OnDelete(DeleteBehavior.Restrict);
 
                 f.HasIndex(fr => new { fr.UserId, fr.FriendId }).IsUnique();
+
+                f.HasQueryFilter(fr => !fr.IsDeleted);
             });
 
             // MESSAGES
@@ -78,6 +83,9 @@ namespace Whisper.Data.Context
                    .WithMany(c => c.Messages)
                    .HasForeignKey(m => m.ChatId)
                    .OnDelete(DeleteBehavior.Cascade);
+
+                msg.HasQueryFilter(m => !m.IsDeleted);
+
             });
 
             // CHATS
@@ -91,6 +99,8 @@ namespace Whisper.Data.Context
                     .WithOne()
                     .HasForeignKey<Chat>(c => c.ActiveStreamId)
                     .OnDelete(DeleteBehavior.SetNull);
+
+                chat.HasQueryFilter(c => !c.IsDeleted);
             });
 
             // STREAMS

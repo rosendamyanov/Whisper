@@ -16,5 +16,8 @@
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? AcceptedAt { get; set; }
+
+        public bool IsDeleted { get; set; } = false;
+        public DateTime? DeletedAt { get; set; }
     }
 }

@@ -12,5 +12,7 @@
 
         public ICollection<User> Users { get; set; } = new List<User>();
         public ICollection<Message> Messages { get; set; } = new List<Message>();
+        public bool IsDeleted { get; set; } = false;
+        public DateTime? DeletedAt { get; set; }
     }
 }

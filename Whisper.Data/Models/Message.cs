@@ -13,5 +13,7 @@
 
         public Guid ChatId { get; set; }
         public Chat Chat { get; set; }
+        public bool IsDeleted { get; set; } = false;
+        public DateTime? DeletedAt { get; set; }
     }
 }
