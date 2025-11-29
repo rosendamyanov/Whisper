@@ -1,5 +1,4 @@
 # Project Whisper  
-
 ## A Self-Hosted High-Fidelity Streaming & Chat Platform  
 
 ### The Vision  
@@ -16,24 +15,18 @@ A custom **desktop client**, built with Electron, will provide a user-friendly i
 
 ---
 
-### Core Features (The Goal)  
+### Core Features
 
-- 📺 **High-Fidelity Screen & Video Streaming**  
-  Seamlessly stream your screen or camera to friends. Supports multiple quality configurations:  
-  - 720p30/60  
-  - 1080p30/60  
-
-- 🎙️ **Voice Calls & Channels**  
-  Hop into voice channels to talk with one or more friends in real-time.  
-
-- 💬 **Real-Time Chat**  
-  Full-featured text chat system with servers, channels, and direct messaging.  
-
-- 👫 **Friends List**  
-  Add friends, see their online status, and manage your connections.  
-
-- 🔒 **Self-Hosted**  
-  The backend runs on your own hardware, giving you full ownership of your data and service.  
+| Feature | Status | Notes |
+|---------|--------|-------|
+| 🔐 **Authentication** | ✅ Done | Register, login, JWT tokens, refresh tokens, logout |
+| 👫 **Friendships** | ✅ Done | Send/accept/decline requests, remove friends |
+| 💬 **Real-Time Chat** | ✅ Done | Direct messages, group chats, message history |
+| 🎙️ **Voice Calls** | 🔲 Planned | Real-time voice channels |
+| 📺 **Live Streaming** | 🔲 Planned | High-fidelity screen/video streaming (720p-1080p @ 60fps) |
+| 🔔 **Notifications** | 🔲 Planned | Unread messages, friend requests |
+| 🚫 **User Blocking** | 🔲 Planned | Block non-friends |
+| 📝 **Audit Logging** | 🔲 Planned | Track account activity, exports |
 
 ---
 
@@ -42,21 +35,19 @@ A custom **desktop client**, built with Electron, will provide a user-friendly i
 The project is divided into two distinct applications:  
 
 #### 1. The API (The Server)  
-Built in **C# with .NET 8**, the backend will handle:  
+Built in **C# with .NET 8**, the backend handles:  
 - User authentication and accounts  
 - Friend relationships, chat, and server/channel data  
-- Caching strategies for responsiveness  
 - Real-time communication with **SignalR**  
 - Orchestrating **WebRTC** for voice/video streaming  
 
-It will be **containerized with Docker** and run 24/7 on a dedicated machine (e.g., an old laptop).  
+It will be **containerized with Docker** and run 24/7 on a dedicated machine.  
 
 #### 2. The Client (The User Interface)  
 Built with **Electron**, the client will:  
 - Provide the UI for chat, voice, and streaming  
 - Connect securely to the self-hosted API  
 - Render video streams and handle audio playback  
-- Offer a simple installer for easy setup  
 
 ---
 
@@ -67,6 +58,7 @@ Built with **Electron**, the client will:
 - Real-Time: SignalR  
 - Streaming: WebRTC  
 - Database: SQL Server  
+- ORM: Entity Framework Core
 - Deployment: Docker  
 
 **Frontend (Client):**  
@@ -76,11 +68,45 @@ Built with **Electron**, the client will:
 
 ---
 
+### API Structure
+```
+Whisper/
+├── Whisper.Api/           # Controllers, middleware, Program.cs
+├── Whisper.Services/      # Business logic, factories
+├── Whisper.Data/          # Repositories, DbContext, models
+├── Whisper.Authentication/ # Auth services, JWT, validation
+├── Whisper.Common/        # Shared DTOs, responses, constants
+└── Whisper.DTOs/          # Request/Response DTOs
+```
+
+---
+
 ### Project Status  
-🚧 **Currently in planning and early development phase.**  
 
-The immediate focus is on:  
-- Setting up the foundational structure for the API  
-- Laying out the basic client framework  
+🚧 **In active development**  
 
-Stay tuned for updates!  
+**Completed:**
+- ✅ Authentication system (JWT + refresh tokens + cookies)
+- ✅ Friendship system (requests, accept/decline, remove)
+- ✅ Chat system (DMs, group chats, messages)
+- ✅ Soft delete support for relevant entities
+- ✅ Global query filters
+
+**Next up:**
+- 🔄 Voice sessions
+- 🔄 Live streaming
+- 🔄 Electron client
+
+---
+
+### Future Enhancements
+
+- Rate limiting on auth endpoints
+- Email verification
+- Two-factor authentication
+- Password reset flow
+- Session management
+- Notification system
+- User blocking (non-friends)
+- Audit logging system
+- Memory caching for performance
