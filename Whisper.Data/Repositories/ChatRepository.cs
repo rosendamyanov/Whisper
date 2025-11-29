@@ -141,7 +141,6 @@ namespace Whisper.Data.Repositories
         public async Task<User?> GetUserByIdAsync(Guid userId)
         {
             return await _context.Users
-                .AsNoTracking()
                 .FirstOrDefaultAsync(u => u.Id == userId);
         }
 
