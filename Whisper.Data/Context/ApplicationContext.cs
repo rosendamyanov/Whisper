@@ -110,6 +110,11 @@ namespace Whisper.Data.Context
                     .WithMany()
                     .HasForeignKey(s => s.HostUserId)
                     .OnDelete(DeleteBehavior.Restrict);
+
+                stream.HasOne(s => s.Chat)
+                    .WithMany()
+                    .HasForeignKey(s => s.ChatId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             // VOICE SESSIONS
