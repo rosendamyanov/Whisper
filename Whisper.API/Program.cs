@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
@@ -74,6 +73,7 @@ namespace Whisper.Api
             builder.Services.AddScoped<IAuthRepository, AuthRepository>();
             builder.Services.AddScoped<IChatRepository, ChatRepository>();
             builder.Services.AddScoped<IFriendshipRepository, FriendshipRepository>();
+            builder.Services.AddScoped<ILiveStreamRepository, LiveStreamRepository>();
 
 
             // Services
@@ -81,11 +81,13 @@ namespace Whisper.Api
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IChatService, ChatService>();
             builder.Services.AddScoped<IFriendshipService, FriendshipService>();
+            builder.Services.AddScoped<ILiveStreamService, LiveStreamService>();
 
             // Factories
             builder.Services.AddScoped<IAuthFactory, AuthFactory>();
             builder.Services.AddScoped<IChatFactory, ChatFactory>();
             builder.Services.AddScoped<IFriendshipFactory, FriendshipFactory>();
+            builder.Services.AddScoped<ILiveStreamFactory, LiveStreamFactory>();
 
             // Validators
             builder.Services.AddScoped<IEmailValidation, EmailValidation>();
