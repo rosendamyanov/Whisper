@@ -20,6 +20,7 @@ using Whisper.Services;
 using Whisper.Services.Factories;
 using Whisper.Services.Factories.ChatFactory;
 using Whisper.Services.Factories.Interfaces;
+using Whisper.Services.Hubs;
 using Whisper.Services.Services;
 using Whisper.Services.Services.Interfaces;
 
@@ -97,6 +98,7 @@ namespace Whisper.Api
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSignalR();
             builder.Services.AddSwaggerGen(c =>
             {
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -132,6 +134,8 @@ namespace Whisper.Api
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+            app.MapHub<ChatHub>("/hubs/chat");
+            app.MapHub<StreamHub>("/hubs/stream");
 
 
             app.MapControllers();
