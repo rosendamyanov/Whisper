@@ -135,6 +135,7 @@ namespace Whisper.Api
             app.UseAuthentication();
             app.UseAuthorization();
             app.MapHub<ChatHub>("/hubs/chat");
+            app.MapHub<VoiceHub>("/hubs/voice");
             app.MapHub<StreamHub>("/hubs/stream");
 
 
