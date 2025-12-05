@@ -1,0 +1,33 @@
+# Node/NPM
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Build outputs
+dist/
+dist-electron/
+out/
+release/
+build/
+
+# Electron
+*.exe
+*.dmg
+*.AppImage
+*.deb
+*.rpm
+
+# Vite
+.vite/
+*.local
+
+# Environment
+.env
+.env.local
+
+# Coverage
+coverage/
+
+# TypeScript
+*.tsbuildinfo
