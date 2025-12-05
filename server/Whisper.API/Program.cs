@@ -11,8 +11,8 @@ using Whisper.Authentication.Factory;
 using Whisper.Authentication.Factory.Interfaces;
 using Whisper.Authentication.Services;
 using Whisper.Authentication.Services.Interfaces;
-using Whisper.Authentication.Validation;
-using Whisper.Authentication.Validation.Interfaces;
+using Whisper.Services.Validation;
+using Whisper.Services.Validation.Interfaces;
 using Whisper.Data.Context;
 using Whisper.Data.Repositories;
 using Whisper.Data.Repositories.Interfaces;
@@ -75,6 +75,7 @@ namespace Whisper.Api
             builder.Services.AddScoped<IChatRepository, ChatRepository>();
             builder.Services.AddScoped<IFriendshipRepository, FriendshipRepository>();
             builder.Services.AddScoped<ILiveStreamRepository, LiveStreamRepository>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 
             // Services
@@ -83,12 +84,14 @@ namespace Whisper.Api
             builder.Services.AddScoped<IChatService, ChatService>();
             builder.Services.AddScoped<IFriendshipService, FriendshipService>();
             builder.Services.AddScoped<ILiveStreamService, LiveStreamService>();
+            builder.Services.AddScoped<IUserService, UserService>();
 
             // Factories
             builder.Services.AddScoped<IAuthFactory, AuthFactory>();
             builder.Services.AddScoped<IChatFactory, ChatFactory>();
             builder.Services.AddScoped<IFriendshipFactory, FriendshipFactory>();
             builder.Services.AddScoped<ILiveStreamFactory, LiveStreamFactory>();
+            builder.Services.AddScoped<IUserFactory, UserFactory>();
 
             // Validators
             builder.Services.AddScoped<IEmailValidation, EmailValidation>();

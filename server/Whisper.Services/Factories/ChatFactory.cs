@@ -1,5 +1,6 @@
 ﻿using Whisper.Data.Models;
 using Whisper.DTOs.Response.Chat;
+using Whisper.DTOs.Response.User;
 using Whisper.Services.Factories.Interfaces;
 
 namespace Whisper.Services.Factories.ChatFactory
@@ -36,12 +37,13 @@ namespace Whisper.Services.Factories.ChatFactory
             };
         }
 
-        public UserBasicDTO MapToDto(User user)
+        public UserBasicDto MapToDto(User user)
         {
-            return new UserBasicDTO
+            return new UserBasicDto
             {
                 Id = user.Id,
-                Username = user.Username
+                Username = user.Username,
+                Role = user.Role
             };
         }
 
