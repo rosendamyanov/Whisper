@@ -1,0 +1,847 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Repos\\C#\\Whisper\\Whisper\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{9A838612-3F5E-43F7-9254-4FF2751FECC4}|Whisper.Authentication\\Whisper.Authentication.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.authentication\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9A838612-3F5E-43F7-9254-4FF2751FECC4}|Whisper.Authentication\\Whisper.Authentication.csproj|solutionrelative:whisper.authentication\\services\\authservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{585AE602-642C-4FB8-B5E8-109CA9C729CF}|Whisper.Api\\Whisper.API.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.api\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{585AE602-642C-4FB8-B5E8-109CA9C729CF}|Whisper.Api\\Whisper.API.csproj|solutionrelative:whisper.api\\controllers\\authcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2A462032-C304-4383-8636-B3CA2508DB25}|Whisper.Services\\Whisper.Services.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.services\\services\\chatservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2A462032-C304-4383-8636-B3CA2508DB25}|Whisper.Services\\Whisper.Services.csproj|solutionrelative:whisper.services\\services\\chatservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{09AB6B3E-3827-4570-81B5-7852388A3BD6}|Whisper.Data\\Whisper.Data.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.data\\models\\chat.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{09AB6B3E-3827-4570-81B5-7852388A3BD6}|Whisper.Data\\Whisper.Data.csproj|solutionrelative:whisper.data\\models\\chat.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{09AB6B3E-3827-4570-81B5-7852388A3BD6}|Whisper.Data\\Whisper.Data.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.data\\context\\applicationcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{09AB6B3E-3827-4570-81B5-7852388A3BD6}|Whisper.Data\\Whisper.Data.csproj|solutionrelative:whisper.data\\context\\applicationcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{09AB6B3E-3827-4570-81B5-7852388A3BD6}|Whisper.Data\\Whisper.Data.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.data\\models\\message.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{09AB6B3E-3827-4570-81B5-7852388A3BD6}|Whisper.Data\\Whisper.Data.csproj|solutionrelative:whisper.data\\models\\message.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9A838612-3F5E-43F7-9254-4FF2751FECC4}|Whisper.Authentication\\Whisper.Authentication.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.authentication\\data\\authrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9A838612-3F5E-43F7-9254-4FF2751FECC4}|Whisper.Authentication\\Whisper.Authentication.csproj|solutionrelative:whisper.authentication\\data\\authrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9A838612-3F5E-43F7-9254-4FF2751FECC4}|Whisper.Authentication\\Whisper.Authentication.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.authentication\\factory\\authfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9A838612-3F5E-43F7-9254-4FF2751FECC4}|Whisper.Authentication\\Whisper.Authentication.csproj|solutionrelative:whisper.authentication\\factory\\authfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9A838612-3F5E-43F7-9254-4FF2751FECC4}|Whisper.Authentication\\Whisper.Authentication.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.authentication\\whisper.authentication.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{9A838612-3F5E-43F7-9254-4FF2751FECC4}|Whisper.Authentication\\Whisper.Authentication.csproj|solutionrelative:whisper.authentication\\whisper.authentication.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2D8B7BC1-14A2-4FA4-85DE-322FF0039EEB}|Whisper.Common\\Whisper.Common.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.common\\response\\apiresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2D8B7BC1-14A2-4FA4-85DE-322FF0039EEB}|Whisper.Common\\Whisper.Common.csproj|solutionrelative:whisper.common\\response\\apiresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9A838612-3F5E-43F7-9254-4FF2751FECC4}|Whisper.Authentication\\Whisper.Authentication.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.authentication\\dtos\\response\\authresponsedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9A838612-3F5E-43F7-9254-4FF2751FECC4}|Whisper.Authentication\\Whisper.Authentication.csproj|solutionrelative:whisper.authentication\\dtos\\response\\authresponsedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{585AE602-642C-4FB8-B5E8-109CA9C729CF}|Whisper.Api\\Whisper.API.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{585AE602-642C-4FB8-B5E8-109CA9C729CF}|Whisper.Api\\Whisper.API.csproj|solutionrelative:whisper.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{585AE602-642C-4FB8-B5E8-109CA9C729CF}|Whisper.Api\\Whisper.API.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.api\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{585AE602-642C-4FB8-B5E8-109CA9C729CF}|Whisper.Api\\Whisper.API.csproj|solutionrelative:whisper.api\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9A838612-3F5E-43F7-9254-4FF2751FECC4}|Whisper.Authentication\\Whisper.Authentication.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.authentication\\dtos\\request\\logoutrequestdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9A838612-3F5E-43F7-9254-4FF2751FECC4}|Whisper.Authentication\\Whisper.Authentication.csproj|solutionrelative:whisper.authentication\\dtos\\request\\logoutrequestdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9A838612-3F5E-43F7-9254-4FF2751FECC4}|Whisper.Authentication\\Whisper.Authentication.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.authentication\\dtos\\request\\userregisterrequestdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9A838612-3F5E-43F7-9254-4FF2751FECC4}|Whisper.Authentication\\Whisper.Authentication.csproj|solutionrelative:whisper.authentication\\dtos\\request\\userregisterrequestdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9A838612-3F5E-43F7-9254-4FF2751FECC4}|Whisper.Authentication\\Whisper.Authentication.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.authentication\\services\\interfaces\\iauthservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9A838612-3F5E-43F7-9254-4FF2751FECC4}|Whisper.Authentication\\Whisper.Authentication.csproj|solutionrelative:whisper.authentication\\services\\interfaces\\iauthservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9A838612-3F5E-43F7-9254-4FF2751FECC4}|Whisper.Authentication\\Whisper.Authentication.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.authentication\\data\\interfaces\\iauthrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9A838612-3F5E-43F7-9254-4FF2751FECC4}|Whisper.Authentication\\Whisper.Authentication.csproj|solutionrelative:whisper.authentication\\data\\interfaces\\iauthrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2D8B7BC1-14A2-4FA4-85DE-322FF0039EEB}|Whisper.Common\\Whisper.Common.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.common\\response\\authentication\\responsecodes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2D8B7BC1-14A2-4FA4-85DE-322FF0039EEB}|Whisper.Common\\Whisper.Common.csproj|solutionrelative:whisper.common\\response\\authentication\\responsecodes.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2D8B7BC1-14A2-4FA4-85DE-322FF0039EEB}|Whisper.Common\\Whisper.Common.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.common\\response\\authentication\\responsemessages.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2D8B7BC1-14A2-4FA4-85DE-322FF0039EEB}|Whisper.Common\\Whisper.Common.csproj|solutionrelative:whisper.common\\response\\authentication\\responsemessages.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2D8B7BC1-14A2-4FA4-85DE-322FF0039EEB}|Whisper.Common\\Whisper.Common.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.common\\messages\\messages.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2D8B7BC1-14A2-4FA4-85DE-322FF0039EEB}|Whisper.Common\\Whisper.Common.csproj|solutionrelative:whisper.common\\messages\\messages.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{585AE602-642C-4FB8-B5E8-109CA9C729CF}|Whisper.Api\\Whisper.API.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{585AE602-642C-4FB8-B5E8-109CA9C729CF}|Whisper.Api\\Whisper.API.csproj|solutionrelative:whisper.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{585AE602-642C-4FB8-B5E8-109CA9C729CF}|Whisper.Api\\Whisper.API.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.api\\dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{585AE602-642C-4FB8-B5E8-109CA9C729CF}|Whisper.Api\\Whisper.API.csproj|solutionrelative:whisper.api\\dockerfile||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9A838612-3F5E-43F7-9254-4FF2751FECC4}|Whisper.Authentication\\Whisper.Authentication.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.authentication\\factory\\interfaces\\iauthfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9A838612-3F5E-43F7-9254-4FF2751FECC4}|Whisper.Authentication\\Whisper.Authentication.csproj|solutionrelative:whisper.authentication\\factory\\interfaces\\iauthfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9A838612-3F5E-43F7-9254-4FF2751FECC4}|Whisper.Authentication\\Whisper.Authentication.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.authentication\\configuration\\cookieconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9A838612-3F5E-43F7-9254-4FF2751FECC4}|Whisper.Authentication\\Whisper.Authentication.csproj|solutionrelative:whisper.authentication\\configuration\\cookieconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9A838612-3F5E-43F7-9254-4FF2751FECC4}|Whisper.Authentication\\Whisper.Authentication.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.authentication\\configuration\\jwtsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9A838612-3F5E-43F7-9254-4FF2751FECC4}|Whisper.Authentication\\Whisper.Authentication.csproj|solutionrelative:whisper.authentication\\configuration\\jwtsettings.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9A838612-3F5E-43F7-9254-4FF2751FECC4}|Whisper.Authentication\\Whisper.Authentication.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.authentication\\services\\tokenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9A838612-3F5E-43F7-9254-4FF2751FECC4}|Whisper.Authentication\\Whisper.Authentication.csproj|solutionrelative:whisper.authentication\\services\\tokenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{09AB6B3E-3827-4570-81B5-7852388A3BD6}|Whisper.Data\\Whisper.Data.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.data\\models\\livestream.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{09AB6B3E-3827-4570-81B5-7852388A3BD6}|Whisper.Data\\Whisper.Data.csproj|solutionrelative:whisper.data\\models\\livestream.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{09AB6B3E-3827-4570-81B5-7852388A3BD6}|Whisper.Data\\Whisper.Data.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.data\\models\\friendship.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{09AB6B3E-3827-4570-81B5-7852388A3BD6}|Whisper.Data\\Whisper.Data.csproj|solutionrelative:whisper.data\\models\\friendship.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{09AB6B3E-3827-4570-81B5-7852388A3BD6}|Whisper.Data\\Whisper.Data.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.data\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{09AB6B3E-3827-4570-81B5-7852388A3BD6}|Whisper.Data\\Whisper.Data.csproj|solutionrelative:whisper.data\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9A838612-3F5E-43F7-9254-4FF2751FECC4}|Whisper.Authentication\\Whisper.Authentication.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.authentication\\validation\\passwordvalidation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9A838612-3F5E-43F7-9254-4FF2751FECC4}|Whisper.Authentication\\Whisper.Authentication.csproj|solutionrelative:whisper.authentication\\validation\\passwordvalidation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9A838612-3F5E-43F7-9254-4FF2751FECC4}|Whisper.Authentication\\Whisper.Authentication.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.authentication\\validation\\emailvalidation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9A838612-3F5E-43F7-9254-4FF2751FECC4}|Whisper.Authentication\\Whisper.Authentication.csproj|solutionrelative:whisper.authentication\\validation\\emailvalidation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{09AB6B3E-3827-4570-81B5-7852388A3BD6}|Whisper.Data\\Whisper.Data.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.data\\models\\voiceparticipant.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{09AB6B3E-3827-4570-81B5-7852388A3BD6}|Whisper.Data\\Whisper.Data.csproj|solutionrelative:whisper.data\\models\\voiceparticipant.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{09AB6B3E-3827-4570-81B5-7852388A3BD6}|Whisper.Data\\Whisper.Data.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.data\\models\\voicesession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{09AB6B3E-3827-4570-81B5-7852388A3BD6}|Whisper.Data\\Whisper.Data.csproj|solutionrelative:whisper.data\\models\\voicesession.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{09AB6B3E-3827-4570-81B5-7852388A3BD6}|Whisper.Data\\Whisper.Data.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.data\\migrations\\20250923162201_initial.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{09AB6B3E-3827-4570-81B5-7852388A3BD6}|Whisper.Data\\Whisper.Data.csproj|solutionrelative:whisper.data\\migrations\\20250923162201_initial.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{09AB6B3E-3827-4570-81B5-7852388A3BD6}|Whisper.Data\\Whisper.Data.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.data\\migrations\\applicationcontextmodelsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{09AB6B3E-3827-4570-81B5-7852388A3BD6}|Whisper.Data\\Whisper.Data.csproj|solutionrelative:whisper.data\\migrations\\applicationcontextmodelsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Data\\Migrations\\20251117154358_UpdatedReletionships.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Whisper.Data\\Migrations\\20251117154358_UpdatedReletionships.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{09AB6B3E-3827-4570-81B5-7852388A3BD6}|Whisper.Data\\Whisper.Data.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.data\\migrations\\20251113210506_chatandmessagesmodels.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{09AB6B3E-3827-4570-81B5-7852388A3BD6}|Whisper.Data\\Whisper.Data.csproj|solutionrelative:whisper.data\\migrations\\20251113210506_chatandmessagesmodels.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{09AB6B3E-3827-4570-81B5-7852388A3BD6}|Whisper.Data\\Whisper.Data.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.data\\models\\authentication\\refreshtoken.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{09AB6B3E-3827-4570-81B5-7852388A3BD6}|Whisper.Data\\Whisper.Data.csproj|solutionrelative:whisper.data\\models\\authentication\\refreshtoken.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9A838612-3F5E-43F7-9254-4FF2751FECC4}|Whisper.Authentication\\Whisper.Authentication.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.authentication\\services\\interfaces\\itokenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9A838612-3F5E-43F7-9254-4FF2751FECC4}|Whisper.Authentication\\Whisper.Authentication.csproj|solutionrelative:whisper.authentication\\services\\interfaces\\itokenservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{09AB6B3E-3827-4570-81B5-7852388A3BD6}|Whisper.Data\\Whisper.Data.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.data\\models\\authentication\\usercredentials.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{09AB6B3E-3827-4570-81B5-7852388A3BD6}|Whisper.Data\\Whisper.Data.csproj|solutionrelative:whisper.data\\models\\authentication\\usercredentials.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{09AB6B3E-3827-4570-81B5-7852388A3BD6}|Whisper.Data\\Whisper.Data.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.data\\models\\authentication\\revokedtoken.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{09AB6B3E-3827-4570-81B5-7852388A3BD6}|Whisper.Data\\Whisper.Data.csproj|solutionrelative:whisper.data\\models\\authentication\\revokedtoken.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{585AE602-642C-4FB8-B5E8-109CA9C729CF}|Whisper.Api\\Whisper.API.csproj|d:\\repos\\c#\\whisper\\whisper\\.dockerignore||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{585AE602-642C-4FB8-B5E8-109CA9C729CF}|Whisper.Api\\Whisper.API.csproj|solutionrelative:.dockerignore||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9A838612-3F5E-43F7-9254-4FF2751FECC4}|Whisper.Authentication\\Whisper.Authentication.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.authentication\\validation\\interfaces\\ipasswordvalidation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9A838612-3F5E-43F7-9254-4FF2751FECC4}|Whisper.Authentication\\Whisper.Authentication.csproj|solutionrelative:whisper.authentication\\validation\\interfaces\\ipasswordvalidation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9A838612-3F5E-43F7-9254-4FF2751FECC4}|Whisper.Authentication\\Whisper.Authentication.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.authentication\\validation\\interfaces\\iemailvalidation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9A838612-3F5E-43F7-9254-4FF2751FECC4}|Whisper.Authentication\\Whisper.Authentication.csproj|solutionrelative:whisper.authentication\\validation\\interfaces\\iemailvalidation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{585AE602-642C-4FB8-B5E8-109CA9C729CF}|Whisper.Api\\Whisper.API.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.api\\whisper.api.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{585AE602-642C-4FB8-B5E8-109CA9C729CF}|Whisper.Api\\Whisper.API.csproj|solutionrelative:whisper.api\\whisper.api.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2A462032-C304-4383-8636-B3CA2508DB25}|Whisper.Services\\Whisper.Services.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.services\\whisper.services.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{2A462032-C304-4383-8636-B3CA2508DB25}|Whisper.Services\\Whisper.Services.csproj|solutionrelative:whisper.services\\whisper.services.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F11F9E1-1EEA-4047-8F22-9BF40F300E03}|Whisper.DTOs\\Whisper.DTOs.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.dtos\\whisper.dtos.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{2F11F9E1-1EEA-4047-8F22-9BF40F300E03}|Whisper.DTOs\\Whisper.DTOs.csproj|solutionrelative:whisper.dtos\\whisper.dtos.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{09AB6B3E-3827-4570-81B5-7852388A3BD6}|Whisper.Data\\Whisper.Data.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.data\\whisper.data.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{09AB6B3E-3827-4570-81B5-7852388A3BD6}|Whisper.Data\\Whisper.Data.csproj|solutionrelative:whisper.data\\whisper.data.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2D8B7BC1-14A2-4FA4-85DE-322FF0039EEB}|Whisper.Common\\Whisper.Common.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.common\\whisper.common.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{2D8B7BC1-14A2-4FA4-85DE-322FF0039EEB}|Whisper.Common\\Whisper.Common.csproj|solutionrelative:whisper.common\\whisper.common.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2F11F9E1-1EEA-4047-8F22-9BF40F300E03}|Whisper.DTOs\\Whisper.DTOs.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.dtos\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2F11F9E1-1EEA-4047-8F22-9BF40F300E03}|Whisper.DTOs\\Whisper.DTOs.csproj|solutionrelative:whisper.dtos\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{09AB6B3E-3827-4570-81B5-7852388A3BD6}|Whisper.Data\\Whisper.Data.csproj|d:\\repos\\c#\\whisper\\whisper\\whisper.data\\migrations\\20251117160447_updatedreletionships.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{09AB6B3E-3827-4570-81B5-7852388A3BD6}|Whisper.Data\\Whisper.Data.csproj|solutionrelative:whisper.data\\migrations\\20251117160447_updatedreletionships.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 6,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AuthController.cs",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.API\\Controllers\\AuthController.cs",
+              "RelativeDocumentMoniker": "Whisper.API\\Controllers\\AuthController.cs",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.API\\Controllers\\AuthController.cs",
+              "RelativeToolTip": "Whisper.API\\Controllers\\AuthController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-23T15:58:46.995Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "ApiResponse.cs",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Common\\Response\\ApiResponse.cs",
+              "RelativeDocumentMoniker": "Whisper.Common\\Response\\ApiResponse.cs",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Common\\Response\\ApiResponse.cs",
+              "RelativeToolTip": "Whisper.Common\\Response\\ApiResponse.cs",
+              "ViewState": "AgIAAAQAAAAAAAAAAAAAAAcAAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-22T15:56:02.18Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "AuthResponseDto.cs",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Authentication\\DTOs\\Response\\AuthResponseDto.cs",
+              "RelativeDocumentMoniker": "Whisper.Authentication\\DTOs\\Response\\AuthResponseDto.cs",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Authentication\\DTOs\\Response\\AuthResponseDto.cs",
+              "RelativeToolTip": "Whisper.Authentication\\DTOs\\Response\\AuthResponseDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-23T14:31:34.879Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Whisper.Authentication.csproj",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Authentication\\Whisper.Authentication.csproj",
+              "RelativeDocumentMoniker": "Whisper.Authentication\\Whisper.Authentication.csproj",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Authentication\\Whisper.Authentication.csproj",
+              "RelativeToolTip": "Whisper.Authentication\\Whisper.Authentication.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-09-23T07:38:12.807Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "AuthFactory.cs",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Authentication\\Factory\\AuthFactory.cs",
+              "RelativeDocumentMoniker": "Whisper.Authentication\\Factory\\AuthFactory.cs",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Authentication\\Factory\\AuthFactory.cs",
+              "RelativeToolTip": "Whisper.Authentication\\Factory\\AuthFactory.cs",
+              "ViewState": "AgIAABwAAAAAAAAAAAAgwC4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-23T14:20:52.87Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "AuthService.cs",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Authentication\\Services\\AuthService.cs",
+              "RelativeDocumentMoniker": "Whisper.Authentication\\Services\\AuthService.cs",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Authentication\\Services\\AuthService.cs",
+              "RelativeToolTip": "Whisper.Authentication\\Services\\AuthService.cs",
+              "ViewState": "AgIAAHQAAAAAAAAAAAAYwDIAAAA+AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-23T14:21:18.255Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "AuthRepository.cs",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Authentication\\Data\\AuthRepository.cs",
+              "RelativeDocumentMoniker": "Whisper.Authentication\\Data\\AuthRepository.cs",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Authentication\\Data\\AuthRepository.cs",
+              "RelativeToolTip": "Whisper.Authentication\\Data\\AuthRepository.cs",
+              "ViewState": "AgIAAEwAAAAAAAAAAAAkwGkAAAA5AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-23T14:54:00.916Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Chat.cs",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Data\\Models\\Chat.cs",
+              "RelativeDocumentMoniker": "Whisper.Data\\Models\\Chat.cs",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Data\\Models\\Chat.cs",
+              "RelativeToolTip": "Whisper.Data\\Models\\Chat.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-13T17:54:36.64Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Message.cs",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Data\\Models\\Message.cs",
+              "RelativeDocumentMoniker": "Whisper.Data\\Models\\Message.cs",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Data\\Models\\Message.cs",
+              "RelativeToolTip": "Whisper.Data\\Models\\Message.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-13T18:18:02.488Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ApplicationContext.cs",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Data\\Context\\ApplicationContext.cs",
+              "RelativeDocumentMoniker": "Whisper.Data\\Context\\ApplicationContext.cs",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Data\\Context\\ApplicationContext.cs",
+              "RelativeToolTip": "Whisper.Data\\Context\\ApplicationContext.cs",
+              "ViewState": "AgIAAHkAAAAAAAAAAAAkwJ4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-23T14:59:18.468Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "ChatService.cs",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Services\\Services\\ChatService.cs",
+              "RelativeDocumentMoniker": "Whisper.Services\\Services\\ChatService.cs",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Services\\Services\\ChatService.cs",
+              "RelativeToolTip": "Whisper.Services\\Services\\ChatService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-22T14:47:28.176Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "IAuthRepository.cs",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Authentication\\Data\\Interfaces\\IAuthRepository.cs",
+              "RelativeDocumentMoniker": "Whisper.Authentication\\Data\\Interfaces\\IAuthRepository.cs",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Authentication\\Data\\Interfaces\\IAuthRepository.cs",
+              "RelativeToolTip": "Whisper.Authentication\\Data\\Interfaces\\IAuthRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAwAAABPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-23T14:54:59.741Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "launchSettings.json",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.API\\Properties\\launchSettings.json",
+              "RelativeDocumentMoniker": "Whisper.API\\Properties\\launchSettings.json",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.API\\Properties\\launchSettings.json",
+              "RelativeToolTip": "Whisper.API\\Properties\\launchSettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-09-23T16:05:25.565Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "UserRegisterRequestDto.cs",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Authentication\\DTOs\\Request\\UserRegisterRequestDto.cs",
+              "RelativeDocumentMoniker": "Whisper.Authentication\\DTOs\\Request\\UserRegisterRequestDto.cs",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Authentication\\DTOs\\Request\\UserRegisterRequestDto.cs",
+              "RelativeToolTip": "Whisper.Authentication\\DTOs\\Request\\UserRegisterRequestDto.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-23T14:31:18.602Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "IAuthService.cs",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Authentication\\Services\\Interfaces\\IAuthService.cs",
+              "RelativeDocumentMoniker": "Whisper.Authentication\\Services\\Interfaces\\IAuthService.cs",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Authentication\\Services\\Interfaces\\IAuthService.cs",
+              "RelativeToolTip": "Whisper.Authentication\\Services\\Interfaces\\IAuthService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-23T14:22:48.787Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "LogoutRequestDTO.cs",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Authentication\\DTOs\\Request\\LogoutRequestDTO.cs",
+              "RelativeDocumentMoniker": "Whisper.Authentication\\DTOs\\Request\\LogoutRequestDTO.cs",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Authentication\\DTOs\\Request\\LogoutRequestDTO.cs",
+              "RelativeToolTip": "Whisper.Authentication\\DTOs\\Request\\LogoutRequestDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-19T19:08:02.868Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.API\\Program.cs",
+              "RelativeDocumentMoniker": "Whisper.API\\Program.cs",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.API\\Program.cs",
+              "RelativeToolTip": "Whisper.API\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB0AAAAtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-22T14:15:32.126Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "ResponseCodes.cs",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Common\\Response\\Authentication\\ResponseCodes.cs",
+              "RelativeDocumentMoniker": "Whisper.Common\\Response\\Authentication\\ResponseCodes.cs",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Common\\Response\\Authentication\\ResponseCodes.cs",
+              "RelativeToolTip": "Whisper.Common\\Response\\Authentication\\ResponseCodes.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAA1AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-22T15:57:33.902Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "ResponseMessages.cs",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Common\\Response\\Authentication\\ResponseMessages.cs",
+              "RelativeDocumentMoniker": "Whisper.Common\\Response\\Authentication\\ResponseMessages.cs",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Common\\Response\\Authentication\\ResponseMessages.cs",
+              "RelativeToolTip": "Whisper.Common\\Response\\Authentication\\ResponseMessages.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABwAAABYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-22T15:58:11.314Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "Messages.cs",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Common\\Messages\\Messages.cs",
+              "RelativeDocumentMoniker": "Whisper.Common\\Messages\\Messages.cs",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Common\\Messages\\Messages.cs",
+              "RelativeToolTip": "Whisper.Common\\Messages\\Messages.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-13T20:58:42.618Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.API\\appsettings.json",
+              "RelativeDocumentMoniker": "Whisper.API\\appsettings.json",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.API\\appsettings.json",
+              "RelativeToolTip": "Whisper.API\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-09-23T21:49:37.181Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "Dockerfile",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.API\\Dockerfile",
+              "RelativeDocumentMoniker": "Whisper.API\\Dockerfile",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.API\\Dockerfile",
+              "RelativeToolTip": "Whisper.API\\Dockerfile",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-09-23T21:49:01.131Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "IAuthFactory.cs",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Authentication\\Factory\\Interfaces\\IAuthFactory.cs",
+              "RelativeDocumentMoniker": "Whisper.Authentication\\Factory\\Interfaces\\IAuthFactory.cs",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Authentication\\Factory\\Interfaces\\IAuthFactory.cs",
+              "RelativeToolTip": "Whisper.Authentication\\Factory\\Interfaces\\IAuthFactory.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-23T14:23:32.038Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "CookieConfig.cs",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Authentication\\Configuration\\CookieConfig.cs",
+              "RelativeDocumentMoniker": "Whisper.Authentication\\Configuration\\CookieConfig.cs",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Authentication\\Configuration\\CookieConfig.cs",
+              "RelativeToolTip": "Whisper.Authentication\\Configuration\\CookieConfig.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-19T12:15:24.812Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "JwtSettings.cs",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Authentication\\Configuration\\JwtSettings.cs",
+              "RelativeDocumentMoniker": "Whisper.Authentication\\Configuration\\JwtSettings.cs",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Authentication\\Configuration\\JwtSettings.cs",
+              "RelativeToolTip": "Whisper.Authentication\\Configuration\\JwtSettings.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-23T14:20:21.793Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "TokenService.cs",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Authentication\\Services\\TokenService.cs",
+              "RelativeDocumentMoniker": "Whisper.Authentication\\Services\\TokenService.cs",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Authentication\\Services\\TokenService.cs",
+              "RelativeToolTip": "Whisper.Authentication\\Services\\TokenService.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAAgwEEAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-23T14:21:29.405Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "LiveStream.cs",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Data\\Models\\LiveStream.cs",
+              "RelativeDocumentMoniker": "Whisper.Data\\Models\\LiveStream.cs",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Data\\Models\\LiveStream.cs",
+              "RelativeToolTip": "Whisper.Data\\Models\\LiveStream.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-13T17:54:42.26Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "Friendship.cs",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Data\\Models\\Friendship.cs",
+              "RelativeDocumentMoniker": "Whisper.Data\\Models\\Friendship.cs",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Data\\Models\\Friendship.cs",
+              "RelativeToolTip": "Whisper.Data\\Models\\Friendship.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-13T17:54:30.943Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "20250923162201_Initial.cs",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Data\\Migrations\\20250923162201_Initial.cs",
+              "RelativeDocumentMoniker": "Whisper.Data\\Migrations\\20250923162201_Initial.cs",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Data\\Migrations\\20250923162201_Initial.cs",
+              "RelativeToolTip": "Whisper.Data\\Migrations\\20250923162201_Initial.cs",
+              "ViewState": "AgIAAHcAAAAAAAAAAAAswJoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-13T14:00:31.815Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "PasswordValidation.cs",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Authentication\\Validation\\PasswordValidation.cs",
+              "RelativeDocumentMoniker": "Whisper.Authentication\\Validation\\PasswordValidation.cs",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Authentication\\Validation\\PasswordValidation.cs",
+              "RelativeToolTip": "Whisper.Authentication\\Validation\\PasswordValidation.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-23T14:22:14.014Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "EmailValidation.cs",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Authentication\\Validation\\EmailValidation.cs",
+              "RelativeDocumentMoniker": "Whisper.Authentication\\Validation\\EmailValidation.cs",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Authentication\\Validation\\EmailValidation.cs",
+              "RelativeToolTip": "Whisper.Authentication\\Validation\\EmailValidation.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-23T14:22:02.547Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 50,
+              "Title": "20251117160447_UpdatedReletionships.cs",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Data\\Migrations\\20251117160447_UpdatedReletionships.cs",
+              "RelativeDocumentMoniker": "Whisper.Data\\Migrations\\20251117160447_UpdatedReletionships.cs",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Data\\Migrations\\20251117160447_UpdatedReletionships.cs",
+              "RelativeToolTip": "Whisper.Data\\Migrations\\20251117160447_UpdatedReletionships.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-17T16:04:47.719Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "User.cs",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Data\\Models\\User.cs",
+              "RelativeDocumentMoniker": "Whisper.Data\\Models\\User.cs",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Data\\Models\\User.cs",
+              "RelativeToolTip": "Whisper.Data\\Models\\User.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-13T17:23:54.454Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "VoiceParticipant.cs",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Data\\Models\\VoiceParticipant.cs",
+              "RelativeDocumentMoniker": "Whisper.Data\\Models\\VoiceParticipant.cs",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Data\\Models\\VoiceParticipant.cs",
+              "RelativeToolTip": "Whisper.Data\\Models\\VoiceParticipant.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-17T15:25:57.683Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "VoiceSession.cs",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Data\\Models\\VoiceSession.cs",
+              "RelativeDocumentMoniker": "Whisper.Data\\Models\\VoiceSession.cs",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Data\\Models\\VoiceSession.cs",
+              "RelativeToolTip": "Whisper.Data\\Models\\VoiceSession.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-17T15:22:16.23Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
+              "Title": "ApplicationContextModelSnapshot.cs",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Data\\Migrations\\ApplicationContextModelSnapshot.cs",
+              "RelativeDocumentMoniker": "Whisper.Data\\Migrations\\ApplicationContextModelSnapshot.cs",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Data\\Migrations\\ApplicationContextModelSnapshot.cs",
+              "RelativeToolTip": "Whisper.Data\\Migrations\\ApplicationContextModelSnapshot.cs",
+              "ViewState": "AgIAAF0BAAAAAAAAAAAiwGcBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-13T14:00:30.384Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 35,
+              "Title": "20251117154358_UpdatedReletionships.cs",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Data\\Migrations\\20251117154358_UpdatedReletionships.cs",
+              "RelativeDocumentMoniker": "Whisper.Data\\Migrations\\20251117154358_UpdatedReletionships.cs",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Data\\Migrations\\20251117154358_UpdatedReletionships.cs",
+              "RelativeToolTip": "Whisper.Data\\Migrations\\20251117154358_UpdatedReletionships.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-17T15:43:58.414Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 36,
+              "Title": "20251113210506_ChatAndMessagesModels.cs",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Data\\Migrations\\20251113210506_ChatAndMessagesModels.cs",
+              "RelativeDocumentMoniker": "Whisper.Data\\Migrations\\20251113210506_ChatAndMessagesModels.cs",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Data\\Migrations\\20251113210506_ChatAndMessagesModels.cs",
+              "RelativeToolTip": "Whisper.Data\\Migrations\\20251113210506_ChatAndMessagesModels.cs",
+              "ViewState": "AgIAAEgAAAAAAAAAAAAUwF0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-11-13T21:05:06.163Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 37,
+              "Title": "RefreshToken.cs",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Data\\Models\\Authentication\\RefreshToken.cs",
+              "RelativeDocumentMoniker": "Whisper.Data\\Models\\Authentication\\RefreshToken.cs",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Data\\Models\\Authentication\\RefreshToken.cs",
+              "RelativeToolTip": "Whisper.Data\\Models\\Authentication\\RefreshToken.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-23T15:28:53.124Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 38,
+              "Title": "ITokenService.cs",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Authentication\\Services\\Interfaces\\ITokenService.cs",
+              "RelativeDocumentMoniker": "Whisper.Authentication\\Services\\Interfaces\\ITokenService.cs",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Authentication\\Services\\Interfaces\\ITokenService.cs",
+              "RelativeToolTip": "Whisper.Authentication\\Services\\Interfaces\\ITokenService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-23T14:23:00.04Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 41,
+              "Title": ".dockerignore",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\.dockerignore",
+              "RelativeDocumentMoniker": ".dockerignore",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\.dockerignore",
+              "RelativeToolTip": ".dockerignore",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2025-09-23T21:48:59.165Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 40,
+              "Title": "RevokedToken.cs",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Data\\Models\\Authentication\\RevokedToken.cs",
+              "RelativeDocumentMoniker": "Whisper.Data\\Models\\Authentication\\RevokedToken.cs",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Data\\Models\\Authentication\\RevokedToken.cs",
+              "RelativeToolTip": "Whisper.Data\\Models\\Authentication\\RevokedToken.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-23T15:28:10.252Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 39,
+              "Title": "UserCredentials.cs",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Data\\Models\\Authentication\\UserCredentials.cs",
+              "RelativeDocumentMoniker": "Whisper.Data\\Models\\Authentication\\UserCredentials.cs",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Data\\Models\\Authentication\\UserCredentials.cs",
+              "RelativeToolTip": "Whisper.Data\\Models\\Authentication\\UserCredentials.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-23T15:42:01.273Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 43,
+              "Title": "IEmailValidation.cs",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Authentication\\Validation\\Interfaces\\IEmailValidation.cs",
+              "RelativeDocumentMoniker": "Whisper.Authentication\\Validation\\Interfaces\\IEmailValidation.cs",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Authentication\\Validation\\Interfaces\\IEmailValidation.cs",
+              "RelativeToolTip": "Whisper.Authentication\\Validation\\Interfaces\\IEmailValidation.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-23T14:23:48.121Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 42,
+              "Title": "IPasswordValidation.cs",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Authentication\\Validation\\Interfaces\\IPasswordValidation.cs",
+              "RelativeDocumentMoniker": "Whisper.Authentication\\Validation\\Interfaces\\IPasswordValidation.cs",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Authentication\\Validation\\Interfaces\\IPasswordValidation.cs",
+              "RelativeToolTip": "Whisper.Authentication\\Validation\\Interfaces\\IPasswordValidation.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-23T14:23:58.604Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 45,
+              "Title": "Whisper.Services.csproj",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Services\\Whisper.Services.csproj",
+              "RelativeDocumentMoniker": "Whisper.Services\\Whisper.Services.csproj",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Services\\Whisper.Services.csproj",
+              "RelativeToolTip": "Whisper.Services\\Whisper.Services.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-09-22T19:43:11.27Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 44,
+              "Title": "Whisper.API.csproj",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Api\\Whisper.API.csproj",
+              "RelativeDocumentMoniker": "Whisper.Api\\Whisper.API.csproj",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Api\\Whisper.API.csproj",
+              "RelativeToolTip": "Whisper.Api\\Whisper.API.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-09-22T19:45:40.918Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 46,
+              "Title": "Whisper.DTOs.csproj",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.DTOs\\Whisper.DTOs.csproj",
+              "RelativeDocumentMoniker": "Whisper.DTOs\\Whisper.DTOs.csproj",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.DTOs\\Whisper.DTOs.csproj",
+              "RelativeToolTip": "Whisper.DTOs\\Whisper.DTOs.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-09-22T19:44:58.161Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 47,
+              "Title": "Whisper.Data.csproj",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Data\\Whisper.Data.csproj",
+              "RelativeDocumentMoniker": "Whisper.Data\\Whisper.Data.csproj",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Data\\Whisper.Data.csproj",
+              "RelativeToolTip": "Whisper.Data\\Whisper.Data.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-09-22T19:44:36.334Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 48,
+              "Title": "Whisper.Common.csproj",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Common\\Whisper.Common.csproj",
+              "RelativeDocumentMoniker": "Whisper.Common\\Whisper.Common.csproj",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.Common\\Whisper.Common.csproj",
+              "RelativeToolTip": "Whisper.Common\\Whisper.Common.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2025-09-22T15:55:41.588Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 49,
+              "Title": "Class1.cs",
+              "DocumentMoniker": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.DTOs\\Class1.cs",
+              "RelativeDocumentMoniker": "Whisper.DTOs\\Class1.cs",
+              "ToolTip": "D:\\Repos\\C#\\Whisper\\Whisper\\Whisper.DTOs\\Class1.cs",
+              "RelativeToolTip": "Whisper.DTOs\\Class1.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-09-22T14:45:14.991Z"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
