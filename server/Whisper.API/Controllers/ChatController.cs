@@ -12,7 +12,7 @@ namespace Whisper.API.Controllers
     /// Manages chat operations including direct messages, group chats, and message history
     /// </summary>
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/chat")]
     [Authorize]
     public class ChatController : ControllerBase
     {

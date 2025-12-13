@@ -1,18 +1,18 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using Whisper.Authentication.Configuration;
+using Whisper.Authentication.Data.Interfaces;
 using Whisper.Authentication.Factory.Interfaces;
 using Whisper.Authentication.Services.Interfaces;
-using Whisper.Authentication.Validation.Interfaces;
 using Whisper.Common.Response;
 using Whisper.Common.Response.Authentication;
-using Whisper.Authentication.Data.Interfaces;
-using Whisper.Authentication.DTOs.Request;
-using Whisper.Authentication.DTOs.Response;
 using Whisper.Data.Models;
 using Whisper.Data.Models.Authentication;
+using Whisper.DTOs.Request.Auth;
+using Whisper.DTOs.Request.User;
+using Whisper.DTOs.Response.Auth;
 
 namespace Whisper.Authentication.Services
 {
@@ -27,24 +27,18 @@ namespace Whisper.Authentication.Services
 
         private readonly IAuthRepository _authRepository;
         private readonly IAuthFactory _authFactory;
-        private readonly IEmailValidation _emailValidation;
-        private readonly IPasswordValidation _passwordValidation;
         private readonly ITokenService _tokenService;
         private readonly IOptions<JwtSettings> _jwtSettings;
         private readonly IHttpContextAccessor _httpContext;
         public AuthService(
             IAuthRepository userRepository,
             IAuthFactory userFactory,
-            IEmailValidation emailValidation,
-            IPasswordValidation passwordValidation,
             ITokenService tokenService,
             IOptions<JwtSettings> jwtSettings,
             IHttpContextAccessor httpContext)
         {
             _authRepository = userRepository;
             _authFactory = userFactory;
-            _emailValidation = emailValidation;
-            _passwordValidation = passwordValidation;
             _tokenService = tokenService;
             _jwtSettings = jwtSettings;
             _httpContext = httpContext;
@@ -59,72 +53,11 @@ namespace Whisper.Authentication.Services
         //9. Logging Erros in .log files or app console for easier debugging and monitoring
         //10. Implement memory caching for username, email and tokens(to reduce db calls).
 
-        /// <inheritdoc />
-        public async Task<ApiResponse<AuthResponseDto>> Register(UserRegisterRequestDTO requestUser)
+
+        public async Task<RefreshToken?>GetRefreshTokenByIdAsync(Guid refreshId)
         {
-            if (!_emailValidation.IsEmailValid(requestUser.Email))
-            {
-                return ApiResponse<AuthResponseDto>.Failure(AuthMessages.InvalidEmail, AuthCodes.InvalidEmail);
-            }
-
-            if (!_passwordValidation.IsStrong(requestUser.Password))
-            {
-                return ApiResponse<AuthResponseDto>.Failure(AuthMessages.WeakPassword, AuthCodes.WeakPassword);
-            }
-
-            (bool usernameExists, bool emailExists) = await _authRepository.CheckUserExistenceAsync(requestUser.Username, requestUser.Email);
-            switch (true)
-            {
-                case true when usernameExists && emailExists:
-                    return ApiResponse<AuthResponseDto>.Failure(AuthMessages.UsernameAndEmailExists, AuthCodes.UsernameAndEmailExists);
-                case true when usernameExists:
-                    return ApiResponse<AuthResponseDto>.Failure(AuthMessages.UsernameExists, AuthCodes.UsernameExists);
-                case true when emailExists:
-                    return ApiResponse<AuthResponseDto>.Failure(AuthMessages.EmailExists, AuthCodes.EmailExists);
-            }
-
-            string passwordHash = BCrypt.Net.BCrypt.HashPassword(requestUser.Password);
-            (User user, UserCredentials credentials) = _authFactory.Map(requestUser, passwordHash);
-
-            using var transaction = await _authRepository.BeginTransactionAsync();
-
-            bool isRegistrationSuccess = await _authRepository.AddUserAsync(user);
-            if (!isRegistrationSuccess)
-            {
-                await transaction.RollbackAsync();
-                return ApiResponse<AuthResponseDto>.Failure(AuthMessages.RegistrationFailed, AuthCodes.RegistrationFailed);
-            }
-
-            bool isCredentialsSuccess = await _authRepository.SaveUserCredentialsAsync(credentials);
-            if (!isCredentialsSuccess)
-            {
-                await transaction.RollbackAsync();
-                return ApiResponse<AuthResponseDto>.Failure(AuthMessages.CredentialsSaveFailed, AuthCodes.CredentialsSaveFailed);
-            }
-
-            await transaction.CommitAsync();
-
-            AuthResponseDto tokens = await GenerateAndAttachTokens(user);
-            return ApiResponse<AuthResponseDto>.Success(tokens, AuthMessages.UserRegistered);
-        }
-
-        /// <inheritdoc />
-        public async Task<ApiResponse<AuthResponseDto>> Login(UserLoginRequestDTO requestUser)
-        {
-            User? user = await _authRepository.GetUserWithCredentialsByIdentifierAsync(requestUser.Username);
-
-            if (user == null || user.Credentials == null)
-            {
-                return ApiResponse<AuthResponseDto>.Failure(AuthMessages.UserNotFound, AuthCodes.UserNotFound);
-            }
-
-            if (!BCrypt.Net.BCrypt.Verify(requestUser.Password, user.Credentials.PasswordHash))
-            {
-                return ApiResponse<AuthResponseDto>.Failure(AuthMessages.InvalidCredentials, AuthCodes.InvalidCredentials);
-            }
-
-            AuthResponseDto tokens = await GenerateAndAttachTokens(user);
-            return ApiResponse<AuthResponseDto>.Success(tokens, AuthMessages.UserLogged);
+            RefreshToken? refreshToken = await _authRepository.GetRefreshTokenByIdAsync(refreshId, null);
+            return refreshToken;
         }
 
         /// <inheritdoc />
@@ -218,7 +151,7 @@ namespace Whisper.Authentication.Services
         /// </summary>
         /// <param name="user">User to generate tokens for</param>
         /// <returns>AuthResponseDto containing both tokens and expiration time</returns>
-        private async Task<AuthResponseDto> GenerateAndAttachTokens(User user)
+        public async Task<AuthResponseDto> GenerateAndAttachTokens(User user)
         {
             string accessToken = _tokenService.GenerateAccessToken(user);
             (string rawRefreshToken, RefreshToken refreshToken) = _tokenService.GenerateRefreshToken();
@@ -253,7 +186,7 @@ namespace Whisper.Authentication.Services
         /// </summary>
         /// <param name="refreshToken">The refresh token to revoke</param>
         /// <returns>True if revocation succeeded, false otherwise</returns>
-        private async Task<bool> RevokeRefreshToken(RefreshToken refreshToken)
+        public async Task<bool> RevokeRefreshToken(RefreshToken refreshToken)
         {
             refreshToken.IsRevoked = true;
             RevokedToken revokedToken = _authFactory.Map(refreshToken);
@@ -265,7 +198,7 @@ namespace Whisper.Authentication.Services
         /// Deletes all authentication cookies from the response
         /// </summary>
         /// <param name="response">HTTP response to delete cookies from</param>
-        private void DeleteAuthCookies(HttpResponse response)
+        public void DeleteAuthCookies(HttpResponse response)
         {
             response.Cookies.Delete(AccessTokenCookie);
             response.Cookies.Delete(RefreshTokenCookie);

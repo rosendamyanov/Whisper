@@ -1,5 +1,6 @@
 ﻿using Whisper.Data.Models;
 using Whisper.DTOs.Response.Chat;
+using Whisper.DTOs.Response.User;
 
 namespace Whisper.Services.Factories.Interfaces
 {
@@ -12,6 +13,6 @@ namespace Whisper.Services.Factories.Interfaces
         List<ChatResponseDTO> MapToDto(List<Chat> chats);
         List<MessageResponseDTO> MapToDto(List<Message> messages);
         MessageResponseDTO MapToDto(Message message);
-        UserBasicDTO MapToDto(User user);
+        UserBasicDto MapToDto(User user);
     }
 }

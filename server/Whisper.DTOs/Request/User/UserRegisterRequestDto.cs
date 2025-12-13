@@ -1,4 +1,4 @@
-﻿namespace Whisper.Authentication.DTOs.Request
+﻿namespace Whisper.DTOs.Request.User
 {
     public class UserRegisterRequestDTO
     {

@@ -42,6 +42,13 @@ build/
 *.njsproj
 *.sln
 *.sw?
+.vs/
+**/bin/
+**/obj/
+
+# .NET
+*.user
+appsettings.Development.json
 
 # OS files
 Thumbs.db
