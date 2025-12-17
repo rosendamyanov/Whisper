@@ -10,7 +10,7 @@ namespace Whisper.Authentication.Configuration
             {
                 HttpOnly = true,
                 Secure = true,
-                SameSite = SameSiteMode.Strict,
+                SameSite = SameSiteMode.None,
                 Expires = DateTime.UtcNow.AddMinutes(minutes),
                 Path = "/",
             };

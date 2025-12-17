@@ -118,10 +118,25 @@ namespace Whisper.Api
                     Description = "Real-time communication API for Whisper application"
                 });
 
-                // Include XML comments
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
+            });
+
+            var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(name: MyAllowSpecificOrigins,
+                    policy =>
+                    {
+                        policy.WithOrigins("http://localhost:5173", 
+                                           "https://localhost:5173") 
+                                                                     
+                              .AllowCredentials()
+                              .AllowAnyMethod()
+                              .AllowAnyHeader();
+                    });
             });
 
             var app = builder.Build();
@@ -133,6 +148,7 @@ namespace Whisper.Api
                 app.UseSwaggerUI();
             }
 
+            app.UseCors(MyAllowSpecificOrigins);
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthentication();
