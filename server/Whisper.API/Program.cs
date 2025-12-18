@@ -74,7 +74,6 @@ namespace Whisper.Api
             builder.Services.AddScoped<IAuthRepository, AuthRepository>();
             builder.Services.AddScoped<IChatRepository, ChatRepository>();
             builder.Services.AddScoped<IFriendshipRepository, FriendshipRepository>();
-            builder.Services.AddScoped<ILiveStreamRepository, LiveStreamRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 
@@ -83,7 +82,6 @@ namespace Whisper.Api
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IChatService, ChatService>();
             builder.Services.AddScoped<IFriendshipService, FriendshipService>();
-            builder.Services.AddScoped<ILiveStreamService, LiveStreamService>();
             builder.Services.AddScoped<IUserService, UserService>();
 
             // Factories

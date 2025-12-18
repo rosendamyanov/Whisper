@@ -126,9 +126,6 @@ namespace Whisper.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ActiveStreamId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -145,10 +142,6 @@ namespace Whisper.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ActiveStreamId")
-                        .IsUnique()
-                        .HasFilter("[ActiveStreamId] IS NOT NULL");
 
                     b.ToTable("Chats");
                 });
@@ -193,37 +186,7 @@ namespace Whisper.Data.Migrations
                     b.ToTable("Friendships");
                 });
 
-            modelBuilder.Entity("Whisper.Data.Models.LiveStream", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ChatId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("EndedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("HostUserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsLive")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("StartedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ChatId");
-
-                    b.HasIndex("HostUserId");
-
-                    b.ToTable("Streams");
-                });
-
-            modelBuilder.Entity("Whisper.Data.Models.Message", b =>
+            modelBuilder.Entity("Whisper.Data.Models.Messages.Message", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -242,6 +205,9 @@ namespace Whisper.Data.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<Guid?>("ReplyToId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("SentAt")
                         .HasColumnType("datetime2");
 
@@ -252,9 +218,65 @@ namespace Whisper.Data.Migrations
 
                     b.HasIndex("ChatId");
 
+                    b.HasIndex("ReplyToId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Messages");
+                });
+
+            modelBuilder.Entity("Whisper.Data.Models.Messages.MessageReaction", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid>("MessageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("ReactedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("MessageId", "UserId", "Content")
+                        .IsUnique();
+
+                    b.ToTable("MessageReactions");
+                });
+
+            modelBuilder.Entity("Whisper.Data.Models.Messages.MessageReceipt", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("MessageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("ReadAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("MessageId", "UserId")
+                        .IsUnique();
+
+                    b.ToTable("MessageReceipts");
                 });
 
             modelBuilder.Entity("Whisper.Data.Models.User", b =>
@@ -273,6 +295,9 @@ namespace Whisper.Data.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<string>("ProfilePictureUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Role")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -290,64 +315,6 @@ namespace Whisper.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("Whisper.Data.Models.VoiceParticipant", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsDeafened")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsMuted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("JoinedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("VoiceSessionId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("VoiceSessionId", "UserId")
-                        .IsUnique();
-
-                    b.ToTable("VoiceParticipants");
-                });
-
-            modelBuilder.Entity("Whisper.Data.Models.VoiceSession", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ChatId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("HostUserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("StartedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ChatId");
-
-                    b.HasIndex("HostUserId");
-
-                    b.ToTable("VoiceSessions");
                 });
 
             modelBuilder.Entity("ChatUser", b =>
@@ -398,16 +365,6 @@ namespace Whisper.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Whisper.Data.Models.Chat", b =>
-                {
-                    b.HasOne("Whisper.Data.Models.LiveStream", "ActiveStream")
-                        .WithOne()
-                        .HasForeignKey("Whisper.Data.Models.Chat", "ActiveStreamId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.Navigation("ActiveStream");
-                });
-
             modelBuilder.Entity("Whisper.Data.Models.Friendship", b =>
                 {
                     b.HasOne("Whisper.Data.Models.User", "Friend")
@@ -427,32 +384,18 @@ namespace Whisper.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Whisper.Data.Models.LiveStream", b =>
-                {
-                    b.HasOne("Whisper.Data.Models.Chat", "Chat")
-                        .WithMany()
-                        .HasForeignKey("ChatId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Whisper.Data.Models.User", "HostUser")
-                        .WithMany()
-                        .HasForeignKey("HostUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Chat");
-
-                    b.Navigation("HostUser");
-                });
-
-            modelBuilder.Entity("Whisper.Data.Models.Message", b =>
+            modelBuilder.Entity("Whisper.Data.Models.Messages.Message", b =>
                 {
                     b.HasOne("Whisper.Data.Models.Chat", "Chat")
                         .WithMany("Messages")
                         .HasForeignKey("ChatId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Whisper.Data.Models.Messages.Message", "ReplyTo")
+                        .WithMany()
+                        .HasForeignKey("ReplyToId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Whisper.Data.Models.User", "User")
                         .WithMany("MessagesSent")
@@ -462,50 +405,59 @@ namespace Whisper.Data.Migrations
 
                     b.Navigation("Chat");
 
+                    b.Navigation("ReplyTo");
+
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Whisper.Data.Models.VoiceParticipant", b =>
+            modelBuilder.Entity("Whisper.Data.Models.Messages.MessageReaction", b =>
                 {
+                    b.HasOne("Whisper.Data.Models.Messages.Message", "Message")
+                        .WithMany("Reactions")
+                        .HasForeignKey("MessageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Whisper.Data.Models.User", "User")
-                        .WithMany("VoiceParticipations")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Whisper.Data.Models.VoiceSession", "VoiceSession")
-                        .WithMany("Participants")
-                        .HasForeignKey("VoiceSessionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Message");
 
                     b.Navigation("User");
-
-                    b.Navigation("VoiceSession");
                 });
 
-            modelBuilder.Entity("Whisper.Data.Models.VoiceSession", b =>
+            modelBuilder.Entity("Whisper.Data.Models.Messages.MessageReceipt", b =>
                 {
-                    b.HasOne("Whisper.Data.Models.Chat", "Chat")
-                        .WithMany()
-                        .HasForeignKey("ChatId")
+                    b.HasOne("Whisper.Data.Models.Messages.Message", "Message")
+                        .WithMany("ReadReceipts")
+                        .HasForeignKey("MessageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Whisper.Data.Models.User", "HostUser")
+                    b.HasOne("Whisper.Data.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("HostUserId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Chat");
+                    b.Navigation("Message");
 
-                    b.Navigation("HostUser");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Whisper.Data.Models.Chat", b =>
                 {
                     b.Navigation("Messages");
+                });
+
+            modelBuilder.Entity("Whisper.Data.Models.Messages.Message", b =>
+                {
+                    b.Navigation("Reactions");
+
+                    b.Navigation("ReadReceipts");
                 });
 
             modelBuilder.Entity("Whisper.Data.Models.User", b =>
@@ -520,13 +472,6 @@ namespace Whisper.Data.Migrations
                     b.Navigation("RefreshTokens");
 
                     b.Navigation("RevokedTokens");
-
-                    b.Navigation("VoiceParticipations");
-                });
-
-            modelBuilder.Entity("Whisper.Data.Models.VoiceSession", b =>
-                {
-                    b.Navigation("Participants");
                 });
 #pragma warning restore 612, 618
         }

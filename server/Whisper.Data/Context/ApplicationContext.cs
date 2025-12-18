@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Whisper.Data.Models;
 using Whisper.Data.Models.Authentication;
+using Whisper.Data.Models.Messages;
 
 namespace Whisper.Data.Context
 {
@@ -11,24 +12,26 @@ namespace Whisper.Data.Context
         {
         }
 
-        // DbSets for your models
+        // --- CORE TABLES ---
         public DbSet<User> Users { get; set; }
         public DbSet<UserCredentials> UserCredentials { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<RevokedToken> RevokedTokens { get; set; }
+        public DbSet<Friendship> Friendships { get; set; }
 
+        // --- CHAT & MESSAGING TABLES ---
         public DbSet<Chat> Chats { get; set; }
         public DbSet<Message> Messages { get; set; }
-        public DbSet<LiveStream> Streams { get; set; }
-        public DbSet<Friendship> Friendships { get; set; }
-        public DbSet<VoiceSession> VoiceSessions { get; set; }
-        public DbSet<VoiceParticipant> VoiceParticipants { get; set; }
+        public DbSet<MessageReceipt> MessageReceipts { get; set; }
+        public DbSet<MessageReaction> MessageReactions { get; set; }
+
+        // REMOVED: Streams, VoiceSessions, VoiceParticipants
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // USER CONFIG
+            // ================= USER CONFIG =================
             modelBuilder.Entity<User>(user =>
             {
                 user.HasIndex(u => u.Username).IsUnique();
@@ -39,44 +42,36 @@ namespace Whisper.Data.Context
                     .HasForeignKey<UserCredentials>(c => c.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
 
-                user.HasMany(u => u.RefreshTokens)
-                    .WithOne(rt => rt.User)
-                    .HasForeignKey(rt => rt.UserId)
-                    .OnDelete(DeleteBehavior.Restrict);
-
-                user.HasMany(u => u.RevokedTokens)
-                    .WithOne(rt => rt.User)
-                    .HasForeignKey(rt => rt.UserId)
-                    .OnDelete(DeleteBehavior.Restrict);
-
-                user.HasMany(u => u.MessagesSent)
-                    .WithOne(m => m.User)
-                    .HasForeignKey(m => m.UserId)
-                    .OnDelete(DeleteBehavior.Restrict);
+                user.HasMany(u => u.RefreshTokens).WithOne(rt => rt.User).HasForeignKey(rt => rt.UserId).OnDelete(DeleteBehavior.Restrict);
+                user.HasMany(u => u.RevokedTokens).WithOne(rt => rt.User).HasForeignKey(rt => rt.UserId).OnDelete(DeleteBehavior.Restrict);
+                user.HasMany(u => u.MessagesSent).WithOne(m => m.User).HasForeignKey(m => m.UserId).OnDelete(DeleteBehavior.Restrict);
 
                 user.HasQueryFilter(u => !u.IsDeleted);
-
             });
 
-            // FRIENDSHIPS
+            // ================= FRIENDSHIPS =================
             modelBuilder.Entity<Friendship>(f =>
             {
-                f.HasOne(fr => fr.User)
-                 .WithMany(u => u.Friendships)
-                 .HasForeignKey(fr => fr.UserId)
-                 .OnDelete(DeleteBehavior.Restrict);
-
-                f.HasOne(fr => fr.Friend)
-                 .WithMany()
-                 .HasForeignKey(fr => fr.FriendId)
-                 .OnDelete(DeleteBehavior.Restrict);
-
+                f.HasOne(fr => fr.User).WithMany(u => u.Friendships).HasForeignKey(fr => fr.UserId).OnDelete(DeleteBehavior.Restrict);
+                f.HasOne(fr => fr.Friend).WithMany().HasForeignKey(fr => fr.FriendId).OnDelete(DeleteBehavior.Restrict);
                 f.HasIndex(fr => new { fr.UserId, fr.FriendId }).IsUnique();
-
                 f.HasQueryFilter(fr => !fr.IsDeleted);
             });
 
-            // MESSAGES
+            // ================= CHATS =================
+            modelBuilder.Entity<Chat>(chat =>
+            {
+                // Link Users <-> Chats
+                chat.HasMany(c => c.Users)
+                    .WithMany(u => u.Chats)
+                    .UsingEntity(j => j.ToTable("UserChats"));
+
+                // REMOVED: ActiveStream relation
+
+                chat.HasQueryFilter(c => !c.IsDeleted);
+            });
+
+            // ================= MESSAGES (CORE) =================
             modelBuilder.Entity<Message>(msg =>
             {
                 msg.HasOne(m => m.Chat)
@@ -84,67 +79,45 @@ namespace Whisper.Data.Context
                    .HasForeignKey(m => m.ChatId)
                    .OnDelete(DeleteBehavior.Cascade);
 
+                // Self-Referencing Reply
+                msg.HasOne(m => m.ReplyTo)
+                   .WithMany()
+                   .HasForeignKey(m => m.ReplyToId)
+                   .OnDelete(DeleteBehavior.Restrict);
+
                 msg.HasQueryFilter(m => !m.IsDeleted);
-
             });
 
-            // CHATS
-            modelBuilder.Entity<Chat>(chat =>
+            // ================= MESSAGE RECEIPTS =================
+            modelBuilder.Entity<MessageReceipt>(mr =>
             {
-                chat.HasMany(c => c.Users)
-                    .WithMany(u => u.Chats)
-                    .UsingEntity(j => j.ToTable("UserChats"));
+                mr.HasIndex(r => new { r.MessageId, r.UserId }).IsUnique();
 
-                chat.HasOne(c => c.ActiveStream)
-                    .WithOne()
-                    .HasForeignKey<Chat>(c => c.ActiveStreamId)
-                    .OnDelete(DeleteBehavior.SetNull);
+                mr.HasOne(r => r.Message)
+                  .WithMany(m => m.ReadReceipts)
+                  .HasForeignKey(r => r.MessageId)
+                  .OnDelete(DeleteBehavior.Cascade);
 
-                chat.HasQueryFilter(c => !c.IsDeleted);
+                mr.HasOne(r => r.User)
+                  .WithMany()
+                  .HasForeignKey(r => r.UserId)
+                  .OnDelete(DeleteBehavior.Restrict);
             });
 
-            // STREAMS
-            modelBuilder.Entity<LiveStream>(stream =>
+            // ================= MESSAGE REACTIONS =================
+            modelBuilder.Entity<MessageReaction>(mr =>
             {
-                stream.HasOne(s => s.HostUser)
-                    .WithMany()
-                    .HasForeignKey(s => s.HostUserId)
-                    .OnDelete(DeleteBehavior.Restrict);
+                mr.HasIndex(r => new { r.MessageId, r.UserId, r.Content }).IsUnique();
 
-                stream.HasOne(s => s.Chat)
-                    .WithMany()
-                    .HasForeignKey(s => s.ChatId)
-                    .OnDelete(DeleteBehavior.Cascade);
-            });
+                mr.HasOne(r => r.Message)
+                  .WithMany(m => m.Reactions)
+                  .HasForeignKey(r => r.MessageId)
+                  .OnDelete(DeleteBehavior.Cascade);
 
-            // VOICE SESSIONS
-            modelBuilder.Entity<VoiceSession>(vs =>
-            {
-                vs.HasOne(v => v.HostUser)
-                    .WithMany()
-                    .HasForeignKey(v => v.HostUserId)
-                    .OnDelete(DeleteBehavior.Restrict);
-
-                vs.HasOne(v => v.Chat)
-                    .WithMany()
-                    .HasForeignKey(v => v.ChatId)
-                    .OnDelete(DeleteBehavior.Cascade);
-
-                vs.HasMany(v => v.Participants)
-                    .WithOne(p => p.VoiceSession)
-                    .HasForeignKey(p => p.VoiceSessionId)
-                    .OnDelete(DeleteBehavior.Cascade);
-            });
-
-            // VOICE PARTICIPANTS
-            modelBuilder.Entity<VoiceParticipant>(vp =>
-            {
-                vp.HasOne(p => p.User)
-                    .WithMany(u => u.VoiceParticipations)
-                    .HasForeignKey(p => p.UserId)
-                    .OnDelete(DeleteBehavior.Restrict);
-
-                vp.HasIndex(p => new { p.VoiceSessionId, p.UserId }).IsUnique();
+                mr.HasOne(r => r.User)
+                  .WithMany()
+                  .HasForeignKey(r => r.UserId)
+                  .OnDelete(DeleteBehavior.Restrict);
             });
         }
     }

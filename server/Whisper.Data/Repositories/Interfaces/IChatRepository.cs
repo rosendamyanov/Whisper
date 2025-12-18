@@ -1,4 +1,5 @@
 ﻿using Whisper.Data.Models;
+using Whisper.Data.Models.Messages;
 
 namespace Whisper.Data.Repositories.Interfaces
 {
