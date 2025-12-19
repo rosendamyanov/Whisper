@@ -25,8 +25,6 @@ namespace Whisper.Data.Context
         public DbSet<MessageReceipt> MessageReceipts { get; set; }
         public DbSet<MessageReaction> MessageReactions { get; set; }
 
-        // REMOVED: Streams, VoiceSessions, VoiceParticipants
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -61,13 +59,9 @@ namespace Whisper.Data.Context
             // ================= CHATS =================
             modelBuilder.Entity<Chat>(chat =>
             {
-                // Link Users <-> Chats
                 chat.HasMany(c => c.Users)
                     .WithMany(u => u.Chats)
                     .UsingEntity(j => j.ToTable("UserChats"));
-
-                // REMOVED: ActiveStream relation
-
                 chat.HasQueryFilter(c => !c.IsDeleted);
             });
 
@@ -79,7 +73,6 @@ namespace Whisper.Data.Context
                    .HasForeignKey(m => m.ChatId)
                    .OnDelete(DeleteBehavior.Cascade);
 
-                // Self-Referencing Reply
                 msg.HasOne(m => m.ReplyTo)
                    .WithMany()
                    .HasForeignKey(m => m.ReplyToId)
@@ -118,6 +111,17 @@ namespace Whisper.Data.Context
                   .WithMany()
                   .HasForeignKey(r => r.UserId)
                   .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            // ================= MESSAGE ATTACHMENTS =================
+            modelBuilder.Entity<MessageAttachment>(entity =>
+            {
+                entity.HasKey(a => a.Id);
+
+                entity.HasOne(a => a.Message)
+                      .WithMany(m => m.Attachments)
+                      .HasForeignKey(a => a.MessageId)
+                      .OnDelete(DeleteBehavior.Cascade);
             });
         }
     }
