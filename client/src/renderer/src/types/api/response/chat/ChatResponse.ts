@@ -7,5 +7,5 @@ export interface ChatResponse {
     name: string | null,
     participants: User[],
     createdAt: string,
-    lastMessage: MessageResponse
+    lastMessage: MessageResponse | null;
 }
