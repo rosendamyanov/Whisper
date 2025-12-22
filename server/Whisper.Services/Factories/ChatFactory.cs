@@ -1,4 +1,5 @@
 ﻿using Whisper.Data.Models;
+using Whisper.Data.Models.Messages;
 using Whisper.DTOs.Response.Chat;
 using Whisper.DTOs.Response.User;
 using Whisper.Services.Factories.Interfaces;

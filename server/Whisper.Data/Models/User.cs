@@ -1,4 +1,5 @@
 ﻿using Whisper.Data.Models.Authentication;
+using Whisper.Data.Models.Messages;
 
 namespace Whisper.Data.Models
 {
@@ -13,10 +14,10 @@ namespace Whisper.Data.Models
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public string Role { get; set; } = "User";
         public bool IsDeleted { get; set; } = false;
+        public string? ProfilePictureUrl { get; set; }
 
         public ICollection<Chat> Chats { get; set; } = new List<Chat>();
         public ICollection<Message> MessagesSent { get; set; } = new List<Message>();
         public ICollection<Friendship> Friendships { get; set; } = new List<Friendship>();
-        public ICollection<VoiceParticipant> VoiceParticipations { get; set; } = new List<VoiceParticipant>();
     }
 }

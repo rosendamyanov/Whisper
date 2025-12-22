@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Whisper.Data.Context;
 
@@ -11,9 +12,11 @@ using Whisper.Data.Context;
 namespace Whisper.Data.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20251218000211_AddMessageFeaturesRemovedVoiceAndStream")]
+    partial class AddMessageFeaturesRemovedVoiceAndStream
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -196,18 +199,13 @@ namespace Whisper.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Content")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("EditedAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsPinned")
                         .HasColumnType("bit");
 
                     b.Property<Guid?>("ReplyToId")
@@ -215,9 +213,6 @@ namespace Whisper.Data.Migrations
 
                     b.Property<DateTime>("SentAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -231,37 +226,6 @@ namespace Whisper.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Messages");
-                });
-
-            modelBuilder.Entity("Whisper.Data.Models.Messages.MessageAttachment", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("FileName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("FileSize")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("FileType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("MessageId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MessageId");
-
-                    b.ToTable("MessageAttachment");
                 });
 
             modelBuilder.Entity("Whisper.Data.Models.Messages.MessageReaction", b =>
@@ -449,17 +413,6 @@ namespace Whisper.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Whisper.Data.Models.Messages.MessageAttachment", b =>
-                {
-                    b.HasOne("Whisper.Data.Models.Messages.Message", "Message")
-                        .WithMany("Attachments")
-                        .HasForeignKey("MessageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Message");
-                });
-
             modelBuilder.Entity("Whisper.Data.Models.Messages.MessageReaction", b =>
                 {
                     b.HasOne("Whisper.Data.Models.Messages.Message", "Message")
@@ -505,8 +458,6 @@ namespace Whisper.Data.Migrations
 
             modelBuilder.Entity("Whisper.Data.Models.Messages.Message", b =>
                 {
-                    b.Navigation("Attachments");
-
                     b.Navigation("Reactions");
 
                     b.Navigation("ReadReceipts");

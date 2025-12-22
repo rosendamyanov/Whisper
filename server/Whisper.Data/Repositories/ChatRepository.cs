@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Whisper.Data.Context;
 using Whisper.Data.Models;
+using Whisper.Data.Models.Messages;
 using Whisper.Data.Repositories.Interfaces;
 
 namespace Whisper.Data.Repositories
