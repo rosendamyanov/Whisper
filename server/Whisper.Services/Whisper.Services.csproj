@@ -6,7 +6,11 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
+
+	<ItemGroup>
     <ProjectReference Include="..\Whisper.Authentication\Whisper.Authentication.csproj" />
     <ProjectReference Include="..\Whisper.Common\Whisper.Common.csproj" />
     <ProjectReference Include="..\Whisper.Data\Whisper.Data.csproj" />

@@ -75,6 +75,7 @@ namespace Whisper.Api
             builder.Services.AddScoped<IChatRepository, ChatRepository>();
             builder.Services.AddScoped<IFriendshipRepository, FriendshipRepository>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 
 
             // Services
@@ -83,6 +84,8 @@ namespace Whisper.Api
             builder.Services.AddScoped<IChatService, ChatService>();
             builder.Services.AddScoped<IFriendshipService, FriendshipService>();
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IMessageService, MessageService>();
+            builder.Services.AddScoped<ILocalFileStorageService, LocalFileStorageService>();
 
             // Factories
             builder.Services.AddScoped<IAuthFactory, AuthFactory>();
@@ -90,6 +93,7 @@ namespace Whisper.Api
             builder.Services.AddScoped<IFriendshipFactory, FriendshipFactory>();
             builder.Services.AddScoped<ILiveStreamFactory, LiveStreamFactory>();
             builder.Services.AddScoped<IUserFactory, UserFactory>();
+            builder.Services.AddScoped<IMessageFactory, MessageFactory>();
 
             // Validators
             builder.Services.AddScoped<IEmailValidation, EmailValidation>();
