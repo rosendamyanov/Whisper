@@ -91,7 +91,6 @@ namespace Whisper.Api
             builder.Services.AddScoped<IAuthFactory, AuthFactory>();
             builder.Services.AddScoped<IChatFactory, ChatFactory>();
             builder.Services.AddScoped<IFriendshipFactory, FriendshipFactory>();
-            builder.Services.AddScoped<ILiveStreamFactory, LiveStreamFactory>();
             builder.Services.AddScoped<IUserFactory, UserFactory>();
             builder.Services.AddScoped<IMessageFactory, MessageFactory>();
 
