@@ -63,6 +63,19 @@ namespace Whisper.Api
                 {
                     OnMessageReceived = context =>
                     {
+                        // First, check for SignalR query string token
+                        var path = context.HttpContext.Request.Path;
+                        if (path.StartsWithSegments("/hubs"))
+                        {
+                            var accessToken = context.Request.Query["access_token"];
+                            if (!string.IsNullOrEmpty(accessToken))
+                            {
+                                context.Token = accessToken;
+                                return Task.CompletedTask;
+                            }
+                        }
+
+                        // Fall back to cookie for regular HTTP requests
                         context.Token = context.Request.Cookies["AccessToken"];
                         return Task.CompletedTask;
                     }
@@ -86,6 +99,8 @@ namespace Whisper.Api
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IMessageService, MessageService>();
             builder.Services.AddScoped<ILocalFileStorageService, LocalFileStorageService>();
+            builder.Services.AddScoped<IChatNotificationService, ChatNotificationService>();
+            builder.Services.AddSingleton<IPresenceTracker, PresenceTracker>();
 
             // Factories
             builder.Services.AddScoped<IAuthFactory, AuthFactory>();
@@ -132,7 +147,8 @@ namespace Whisper.Api
                     policy =>
                     {
                         policy.WithOrigins("http://localhost:5173", 
-                                           "https://localhost:5173") 
+                                           "https://localhost:5173",
+                                           "null") 
                                                                      
                               .AllowCredentials()
                               .AllowAnyMethod()

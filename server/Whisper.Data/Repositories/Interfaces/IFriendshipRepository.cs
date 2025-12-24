@@ -7,6 +7,7 @@ namespace Whisper.Data.Repositories.Interfaces
         // Queries
         Task<Friendship?> GetFriendshipAsync(Guid userId, Guid friendId);
         Task<List<Friendship>> GetFriendsAsync(Guid userId);
+        Task<List<Guid>> GetFriendsIdsAsync(Guid userId);
         Task<List<Friendship>> GetPendingRequestsAsync(Guid userId);
         Task<List<Friendship>> GetSentRequestsAsync(Guid userId);
         Task<bool> FriendshipExistsAsync(Guid userId, Guid friendId);

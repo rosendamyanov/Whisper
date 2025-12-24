@@ -42,6 +42,7 @@ namespace Whisper.Services.Factories
                 Content = message.Content,
                 SentAt = message.SentAt,
                 IsEdited = message.EditedAt.HasValue,
+                EditedAt = message.EditedAt,
                 IsPinned = message.IsPinned,
                 Type = message.Type.ToString(),
 
@@ -102,6 +103,18 @@ namespace Whisper.Services.Factories
                 Content = emoji,
                 ReactedAt = DateTime.UtcNow
             };
+        }
+
+        public List<ReactionResponseDto> MapReactions(ICollection<MessageReaction> reactions, Guid currentUserId)
+        {
+            return reactions
+                .GroupBy(r => r.Content)
+                .Select(g => new ReactionResponseDto
+                {
+                    Emoji = g.Key,
+                    Count = g.Count(),
+                    IsReactedByMe = g.Any(r => r.UserId == currentUserId)
+                }).ToList();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Whisper.Common.Response;
 using Whisper.Common.Response.Chat;
+using Whisper.Data.Models;
 using Whisper.Data.Repositories.Interfaces;
 using Whisper.DTOs.Internal;
 using Whisper.DTOs.Request.Message;
@@ -14,12 +15,18 @@ namespace Whisper.Services.Services
         private readonly IMessageRepository _messageRepository;
         private readonly ILocalFileStorageService _localFileStorageService;
         private readonly IMessageFactory _messageFactory;
+        private readonly IChatNotificationService _chatNotificationService;
 
-        public MessageService(IMessageRepository messageRepository, ILocalFileStorageService localFileStorageService, IMessageFactory messageFactory)
+        public MessageService(
+            IMessageRepository messageRepository, 
+            ILocalFileStorageService localFileStorageService, 
+            IMessageFactory messageFactory, 
+            IChatNotificationService chatNotificationService)
         {
             _messageRepository = messageRepository;
             _localFileStorageService = localFileStorageService;
             _messageFactory = messageFactory;
+            _chatNotificationService = chatNotificationService;
         }
         public async Task<ApiResponse<MessageResponseDto>> SendMessageAsync(Guid userId, SendMessageRequestDto request)
         {
@@ -36,7 +43,12 @@ namespace Whisper.Services.Services
                 foreach (var file in request.Files)
                 {
                     using var stream = file.OpenReadStream();
-                    var attachmentInfo = await _localFileStorageService.SaveFileAsync(stream, file.Name, file.ContentType, file.Length);
+                    var attachmentInfo = await _localFileStorageService.SaveFileAsync(
+                            stream,
+                            file.FileName,
+                            file.ContentType,
+                            file.Length
+                        );
                     attachments.Add(attachmentInfo);
                 }
             }
@@ -61,6 +73,8 @@ namespace Whisper.Services.Services
             var savedMessage = await _messageRepository.GetByIdAsync(message.Id);
 
             var messageDto = _messageFactory.Map(savedMessage, userId);
+
+            await _chatNotificationService.BroadcastMessageAsync(savedMessage.ChatId, messageDto);
             return ApiResponse<MessageResponseDto>.Success(messageDto, "message");
         }
 
@@ -91,6 +105,10 @@ namespace Whisper.Services.Services
             var isSaved = await _messageRepository.SaveChangesAsync();
 
             var messageDto = _messageFactory.Map(message, userId);
+
+            if(isSaved)
+                await _chatNotificationService.BroadcastMessageEditedAsync(message.ChatId, messageDto);
+
             return isSaved 
                 ? ApiResponse<MessageResponseDto>.Success(messageDto, "Message edited successfully.")
                 : ApiResponse<MessageResponseDto>.Failure("Failed to update message.", "DB_SAVE_ERROR");
@@ -119,12 +137,22 @@ namespace Whisper.Services.Services
             await _messageRepository.AddReactionAsync(newReaction);
             var isSaved = await _messageRepository.SaveChangesAsync();
 
-            return isSaved
-                ? ApiResponse<bool>.Success(true, "Reaction added.")
-                : ApiResponse<bool>.Failure("Failed to save reaction.", "DB_ERROR");
+            if (!isSaved)
+                return ApiResponse<bool>.Failure("Failed to save reaction.", "DB_ERROR");
+
+            var updatedMessage = await _messageRepository.GetByIdAsync(messageId);
+            var dto = _messageFactory.Map(updatedMessage!, userId);
+
+            await _chatNotificationService.BroadcastReactionChangedAsync(
+                updatedMessage!.ChatId,
+                messageId,
+                dto.Reactions
+            );
+
+            return ApiResponse<bool>.Success(true, "Reaction added.");
         }
 
-        public async Task<ApiResponse<bool>> ReadMessagesAsync(Guid userId, List<Guid> messageIds)
+        public async Task<ApiResponse<bool>> ReadMessagesAsync(Guid userId, Guid chatId, List<Guid> messageIds)
         {
             if (messageIds == null || !messageIds.Any())
             {
@@ -132,13 +160,16 @@ namespace Whisper.Services.Services
             }
 
             await _messageRepository.MarkMessagesAsReadAsync(userId, messageIds);
-            await _messageRepository.SaveChangesAsync();
+            var isSaved = await _messageRepository.SaveChangesAsync();
+
+            if (isSaved)
+                await _chatNotificationService.BroadcastMessagesReadAsync(chatId, userId, messageIds);
 
             return ApiResponse<bool>.Success(true, "Messages marked as read.");
         }
 
         public async Task<ApiResponse<bool>> DeleteMessageAsync(Guid userId, Guid messageId)
-        {
+        {           
             var message = await _messageRepository.GetByIdAsync(messageId);
 
             if(message == null)
@@ -155,9 +186,14 @@ namespace Whisper.Services.Services
             await _messageRepository.UpdateAsync(message);
             var isSaved = await _messageRepository.SaveChangesAsync();
 
-            return isSaved
-                ? ApiResponse<bool>.Success(true, "Message deleted successfully.")
-                : ApiResponse<bool>.Failure("Failed to delete message.", "DB_SAVE_ERROR");
+            if (isSaved)
+            {
+                await _chatNotificationService.BroadcastMessageDeletedAsync(message.ChatId, messageId);
+
+                return ApiResponse<bool>.Success(true, "Deleted");
+            }
+
+            return ApiResponse<bool>.Failure("Failed to delete", "DB_ERROR");
         }
     }
 }

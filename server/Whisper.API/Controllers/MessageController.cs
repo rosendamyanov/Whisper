@@ -43,9 +43,9 @@ namespace Whisper.API.Controllers
         }
 
         [HttpPost("read")]
-        public async Task<IActionResult> MarkMessagesAsRead([FromBody] List<Guid> messageIds)
+        public async Task<IActionResult> MarkMessagesAsRead([FromBody] List<Guid> messageIds, Guid chatId)
         {
-            var result = await _messageService.ReadMessagesAsync(UserId, messageIds);
+            var result = await _messageService.ReadMessagesAsync(UserId, chatId, messageIds);
             return HandleResult(result);
         }
 

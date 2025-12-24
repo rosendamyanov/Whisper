@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
-using Whisper.DTOs.Request.Chat;
+using Whisper.Data.Repositories.Interfaces;
 using Whisper.Services.Services.Interfaces;
 
 namespace Whisper.Services.Hubs
@@ -8,67 +8,86 @@ namespace Whisper.Services.Hubs
     [Authorize]
     public class ChatHub : Hub
     {
-        private readonly IChatService _chatService;
+        private readonly IPresenceTracker _presenceTracker;
+        private readonly IFriendshipRepository _friendshipRepository;
 
-        public ChatHub(IChatService chatService)
+        public ChatHub(IPresenceTracker presenceTracker, IFriendshipRepository friendshipRepository)
         {
-            _chatService = chatService;
+            _presenceTracker = presenceTracker;
+            _friendshipRepository = friendshipRepository;
         }
 
         private Guid GetUserId()
         {
             var userIdClaim = Context.User?.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-            return Guid.Parse(userIdClaim!);
-        }
-
-        private string GetUsername()
-        {
-            return Context.User?.Identity?.Name ?? "Unknown";
+            return Guid.TryParse(userIdClaim, out var id) ? id : Guid.Empty;
         }
 
         public async Task JoinChat(Guid chatId)
         {
-            await Groups.AddToGroupAsync(Context.ConnectionId, $"chat_{chatId}");
+            await Groups.AddToGroupAsync(Context.ConnectionId, chatId.ToString());  
         }
 
         public async Task LeaveChat(Guid chatId)
         {
-            await Groups.RemoveFromGroupAsync(Context.ConnectionId, $"chat_{chatId}");
-        }
-
-        public async Task SendMessage(Guid chatId, string content)
-        {
-            var userId = GetUserId();
-
-            // Save to database
-            var result = await _chatService.SendMessageAsync(userId, new SendMessageRequestDTO
-            {
-                ChatId = chatId,
-                Content = content
-            });
-
-            if (result.IsSuccess)
-            {
-                // Broadcast the saved message (with real ID and timestamp from DB)
-                await Clients.Group($"chat_{chatId}").SendAsync("ReceiveMessage", result.Data);
-            }
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, chatId.ToString());
         }
 
         public async Task StartTyping(Guid chatId)
         {
-            await Clients.OthersInGroup($"chat_{chatId}").SendAsync("UserTyping", new
+            await Clients.OthersInGroup(chatId.ToString()).SendAsync("UserTyping", new
             {
                 UserId = GetUserId(),
-                Username = GetUsername()
+                Username = Context.User?.Identity?.Name ?? "Unknown"
             });
         }
 
         public async Task StopTyping(Guid chatId)
         {
-            await Clients.OthersInGroup($"chat_{chatId}").SendAsync("UserStoppedTyping", new
+            await Clients.OthersInGroup(chatId.ToString()).SendAsync("UserStoppedTyping", new
             {
                 UserId = GetUserId()
             });
+        }
+
+        public override async Task OnConnectedAsync()
+        {
+            var userId = GetUserId();
+            var isFirstConnection = await _presenceTracker.UserConnected(userId, Context.ConnectionId);
+
+            if (isFirstConnection)
+            {
+                var friendIds = await _friendshipRepository.GetFriendsIdsAsync(userId);
+                var friendStrings = friendIds.Select(id => id.ToString()).ToList();
+
+                if (friendStrings.Any())
+                {
+                    await Clients.Users(friendStrings).SendAsync("UserOnline", userId);
+                }
+            }
+
+            await base.OnConnectedAsync();
+        }
+
+        public override async Task OnDisconnectedAsync(Exception? exception)
+        {
+            var userId = GetUserId();
+            var isFullyOffline = await _presenceTracker.UserDisconnected(userId, Context.ConnectionId);
+
+            if (isFullyOffline)
+            {
+                var friendIds = await _friendshipRepository.GetFriendsIdsAsync(userId);
+                var friendStrings = friendIds.Select(id => id.ToString()).ToList();
+
+                if (friendStrings.Any())
+                {
+                    await Clients.Users(friendStrings).SendAsync("UserOffline", userId);
+                }
+
+                // TODO (Future): Update 'LastActive' in User Table here
+            }
+
+            await base.OnDisconnectedAsync(exception);
         }
     }
 }

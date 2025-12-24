@@ -24,7 +24,7 @@ namespace Whisper.Services.Services
             if (!Directory.Exists(folderPath))
                 Directory.CreateDirectory(folderPath);
 
-            var safeFileName = $"{Guid.NewGuid}{Path.GetExtension(originalFileName)}";
+            var safeFileName = $"{Guid.NewGuid()}{Path.GetExtension(originalFileName)}";
             var fullFilePath = Path.Combine(folderPath, safeFileName);
 
             using (var targetStream = new FileStream(fullFilePath, FileMode.Create))

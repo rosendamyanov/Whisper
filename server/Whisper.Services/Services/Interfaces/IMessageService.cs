@@ -12,7 +12,7 @@ namespace Whisper.Services.Services.Interfaces
 
         Task<ApiResponse<ChatLoadResponseDto>> GetChatMessagesAsync(Guid userId, Guid chatId, int limit, DateTime? before);
 
-        Task<ApiResponse<bool>> ReadMessagesAsync(Guid userId, List<Guid> messageIds);
+        Task<ApiResponse<bool>> ReadMessagesAsync(Guid userId, Guid chatId, List<Guid> messageIds);
 
         Task<ApiResponse<bool>> ReactToMessageAsync(Guid userId, Guid messageId, string emoji);
         Task<ApiResponse<bool>> DeleteMessageAsync(Guid userId, Guid messageId);

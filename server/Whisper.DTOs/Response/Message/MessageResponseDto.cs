@@ -6,6 +6,7 @@
         public string? Content { get; set; }
         public DateTime SentAt { get; set; }
         public bool IsEdited { get; set; }
+        public DateTime? EditedAt { get; set; }
         public bool IsPinned { get; set; }
         public string Type { get; set; }
 
