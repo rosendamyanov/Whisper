@@ -27,6 +27,15 @@ namespace Whisper.Data.Repositories
                         (f.UserId == friendId && f.FriendId == userId));
         }
 
+        public async Task<List<Guid>> GetFriendsIdsAsync(Guid userId)
+        {
+            return await _context.Friendships
+                .AsNoTracking()
+                .Where(f => (f.UserId == userId || f.FriendId == userId) && f.IsAccepted)
+                .Select(f => f.UserId == userId ? f.FriendId : f.UserId)
+                .ToListAsync();
+        }
+
         public async Task<List<Friendship>> GetFriendsAsync(Guid userId)
         {
             return await _context.Friendships
