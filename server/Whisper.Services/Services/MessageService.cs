@@ -175,6 +175,15 @@ namespace Whisper.Services.Services
             if (message.UserId != userId)
                 return ApiResponse<bool>.Failure(MessageMessages.DeleteOwnMessagesOnly, MessageCodes.AccessDenied);
 
+
+            if (message.Attachments != null && message.Attachments.Any())
+            {
+                foreach (var attachment in message.Attachments)
+                {
+                    await _localFileStorageService.DeleteFileAsync(attachment.Url);
+                }
+            }
+
             message.IsDeleted = true;
             message.DeletedAt = DateTime.UtcNow;
 
