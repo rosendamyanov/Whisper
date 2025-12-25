@@ -1,13 +1,12 @@
-// src/renderer/src/api/users.ts
-import axiosInstance from './axios'; // Your configured instance with interceptors
+import axiosInstance from './axios';
 import { ApiResponse } from '../../types/api/response/api/ApiResponse';
 import { UserSessionResponse } from '../../types/api/response/user/UserSessionResponse'; 
 import { UserLoginRequest } from '../../types/api/request/auth/UserLoginRequest';
 import { UserRegisterRequest } from '../../types/api/request/auth/UserRegisterRequest';
+import { User } from '../../types/api/response/user/User'; // Import User
 
 export const usersApi = {
   login: async (credentials: UserLoginRequest) => {
-    // The endpoint matches your UserController
     const response = await axiosInstance.post<ApiResponse<UserSessionResponse>>(
       '/user/login', 
       credentials
@@ -21,7 +20,13 @@ export const usersApi = {
       data
     );
     return response.data;
+  },
+
+  search: async (query: string) => {
+    const response = await axiosInstance.get<ApiResponse<User[]>>(
+      'user/search',
+      {params: {query}}
+    );
+    return response.data;
   }
 };
-
-

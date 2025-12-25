@@ -1,6 +1,6 @@
 export interface FriendResponse {
     id: string,
-    firndshipId: string,
+    friendshipId: string,
     username: string,
     friendsSince: string
 }
