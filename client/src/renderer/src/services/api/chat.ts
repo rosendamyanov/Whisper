@@ -8,5 +8,20 @@ export const chatApi = {
             'chat/my-chats'
         );
         return response.data;
+    },
+
+    getOrCreateDirectChat: async (friendId: string) => {
+        const response = await axiosInstance.get<ApiResponse<ChatResponse>>(
+            `/chat/dm/${friendId}`
+        );
+        return response.data;
+    },  
+
+    createGroupChat: async(groupName: string, userIds: string[]) => {
+        const response = await axiosInstance.post<ApiResponse<ChatResponse>>(
+            '/chat/group',
+            {groupName, userIds}
+        );
+        return response.data;
     }
 }
