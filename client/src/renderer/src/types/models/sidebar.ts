@@ -18,4 +18,6 @@ export interface UiChatPreview {
     type: 'direct' | 'group';
 
     isStreaming?: boolean;
+
+    members?: any[];
 }
