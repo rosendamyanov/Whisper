@@ -30,6 +30,23 @@ namespace Whisper.Services.Hubs
         {
             return Context.User?.Identity?.Name ?? "Unknown";
         }
+        public async Task CallUser(Guid targetUserId, Guid chatId)
+        {
+            var callerId = GetUserId();
+            var callerName = GetUsername();
+
+            await Clients.User(targetUserId.ToString()).SendAsync("IncomingCall", new
+            {
+                ChatId = chatId,
+                CallerId = callerId,
+                CallerName = callerName
+            });
+        }
+
+        public async Task RejectCall(Guid callerId)
+        {
+            await Clients.User(callerId.ToString()).SendAsync("CallRejected");
+        }
 
         // ====== Session Management ======
 
@@ -212,7 +229,7 @@ namespace Whisper.Services.Hubs
 
                 participant.IsSpeaking = true;
 
-                await Clients.Group($"vouce_{chatId}").SendAsync("ParticipantStartedSpeaking", new
+                await Clients.Group($"voice_{chatId}").SendAsync("ParticipantStartedSpeaking", new
                 {
                     UserId = userId
                 });
@@ -230,12 +247,14 @@ namespace Whisper.Services.Hubs
             {
                 participant.IsSpeaking = false;
 
-                await Clients.Group($"vouce_{chatId}").SendAsync("ParticipantStartedSpeaking", new
+                // --- FIX: Change Event Name to "ParticipantStoppedSpeaking" ---
+                await Clients.Group($"voice_{chatId}").SendAsync("ParticipantStoppedSpeaking", new
                 {
                     UserId = userId
                 });
             }
         }
+
 
         // ====== WebRTC Signaling ======
 
@@ -265,6 +284,7 @@ namespace Whisper.Services.Hubs
                 await Clients.Client(targetParticipant.ConnectionId).SendAsync("ReceiveAnswer", new
                 {
                     FromUserId = GetUserId(),
+                    FromUsername = GetUsername(),
                     Answer = answer
                 });
             }
@@ -315,11 +335,11 @@ namespace Whisper.Services.Hubs
 
                 await Groups.RemoveFromGroupAsync(removedParicipant.ConnectionId, $"voice_{chatId}");
 
-                await Clients.Group($"voice_{chatId}").SendAsync("Paticipant left", new
+                await Clients.Group($"voice_{chatId}").SendAsync("ParticipantLeft", new
                 {
                     UserId = userId,
                     Username = removedParicipant.Username,
-                    ParticipantCOunt = session.ParticipantCount
+                    ParticipantCount = session.ParticipantCount
                 });
             }
 
@@ -333,7 +353,7 @@ namespace Whisper.Services.Hubs
                 StartSessionTimeout(chatId, session);
 
                 // Notify the remaining user about the timeout
-                await Clients.Group($"voice_{chatId}").SendAsync("SessinTimeoutStarted", new
+                await Clients.Group($"voice_{chatId}").SendAsync("SessionTimeoutStarted", new
                 {
                     ChatId = chatId,
                     TimeoutMinutes = SessionTimeout.TotalMinutes
