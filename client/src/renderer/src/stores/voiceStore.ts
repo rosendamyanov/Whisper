@@ -7,7 +7,7 @@ export interface VoiceParticipant {
     userId: string;
     username: string;
     isMuted: boolean;
-    isDeafened: boolean; // Added
+    isDeafened: boolean;
     isSpeaking: boolean;
 }
 
@@ -35,7 +35,7 @@ interface VoiceState {
     rejectCall: () => void;
     endCall: () => void;
     toggleMute: () => void;
-    toggleDeafen: () => void; // Added
+    toggleDeafen: () => void;
     setParticipants: (p: VoiceParticipant[]) => void;
 }
 
@@ -53,9 +53,22 @@ const stopRingtone = () => {
 };
 
 const ensureConnection = async (set: any, get: any): Promise<signalR.HubConnection | null> => {
+    // 1. RESTORED YOUR TOKEN LOGIC
+    const token = localStorage.getItem('whisper-token') || 
+                  JSON.parse(localStorage.getItem('whisper-auth-storage') || '{}')?.state?.user?.token; 
+
     if (!voiceConnection) {
+        // 2. USE .ENV FOR URL (Fixes localhost issue)
+        const apiUrl = import.meta.env.VITE_API_URL || 'https://localhost:7126/api';
+        const rootUrl = apiUrl.replace(/\/api$/, '');
+        const hubUrl = `${rootUrl}/hubs/voice`;
+
+        // 3. BUILD CONNECTION (With Token + Dynamic URL)
         voiceConnection = new signalR.HubConnectionBuilder()
-            .withUrl('https://localhost:7126/hubs/voice', { withCredentials: true })
+            .withUrl(hubUrl, { 
+                accessTokenFactory: () => token || '', // Sends token to backend to fix 401
+                withCredentials: true 
+            })
             .withAutomaticReconnect()
             .build();
 
@@ -106,16 +119,13 @@ const ensureConnection = async (set: any, get: any): Promise<signalR.HubConnecti
             }));
         });
 
-        voiceConnection.on("ParticipantStoppedSpeaking", (data: { userId: string }) => { // Backend typo: make sure backend sends ParticipantStoppedSpeaking
+        voiceConnection.on("ParticipantStoppedSpeaking", (data: { userId: string }) => { 
              set((state: VoiceState) => ({
                 participants: state.participants.map(p => 
                     p.userId === data.userId ? { ...p, isSpeaking: false } : p
                 )
             }));
         });
-        // Note: Your backend code used "ParticipantStartedSpeaking" for STOP as well (copy-paste error?).
-        // In VoiceHub.cs: StopSpeaking method sends "ParticipantStartedSpeaking" (IsSpeaking = false effectively in frontend if you send bool, but you didn't send bool).
-        // FIX: In backend, rename the event in StopSpeaking to "ParticipantStoppedSpeaking".
 
         // 3. New Participant Joined
         voiceConnection.on("ParticipantJoined", (participant: VoiceParticipant) => {
@@ -135,7 +145,6 @@ const ensureConnection = async (set: any, get: any): Promise<signalR.HubConnecti
         // 4. Session Timeouts
         voiceConnection.on("SessionTimeoutStarted", (data) => {
              console.warn(`Session timeout started. Ending in ${data.timeoutMinutes} mins.`);
-             // You could show a toast notification here
         });
 
         voiceConnection.on("SessionTimeoutExpired", () => {
@@ -149,7 +158,10 @@ const ensureConnection = async (set: any, get: any): Promise<signalR.HubConnecti
         try {
             await voiceConnection.start();
             return voiceConnection;
-        } catch (err) { return null; }
+        } catch (err) { 
+            console.error("Voice Hub Connection Failed:", err);
+            return null; 
+        }
     }
     return voiceConnection;
 };
@@ -213,12 +225,10 @@ export const useVoiceStore = create<VoiceState>((set, get) => ({
     },
 
     toggleMute: () => {
-        // Toggle local state optimistically? No, wait for server or do both.
-        // We need to know current state.
         const userId = useAuthStore.getState().user?.id;
         const me = get().participants.find(p => p.userId === userId);
         if (me) {
-            voiceManager?.toggleMute(!me.isMuted); // Pass new state
+            voiceManager?.toggleMute(!me.isMuted); 
         }
     },
 

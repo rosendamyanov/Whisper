@@ -2,7 +2,7 @@ import { ApiResponse } from "@renderer/types/api/response/api/ApiResponse";
 import { AuthResponse } from "@renderer/types/api/response/auth/AuthResponse";
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 
-const BASE_URL = "https://localhost:7126/api";
+const BASE_URL = import.meta.env.VITE_API_URL || "https://localhost:7126/api";
 
 interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
     _retry?: boolean;

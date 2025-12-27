@@ -10,8 +10,17 @@ class SignalRService {
         const token = localStorage.getItem('whisper-token') || 
                       JSON.parse(localStorage.getItem('whisper-auth-storage') || '{}')?.state?.user?.token; 
 
+        // 1. Get the API URL from env or fallback
+        const apiUrl = import.meta.env.VITE_API_URL || 'https://localhost:7126/api';
+        
+        // 2. Remove '/api' from the end to get the root URL (e.g., https://192.168.1.15:7126)
+        const rootUrl = apiUrl.replace(/\/api$/, '');
+
+        // 3. Append the Hub path
+        const hubUrl = `${rootUrl}/hubs/chat`;
+
         this.connection = new signalR.HubConnectionBuilder()
-            .withUrl('https://localhost:7126/hubs/chat', { 
+            .withUrl(hubUrl, {  // <--- UPDATED HERE
                 accessTokenFactory: () => token || ''
             })
             .withAutomaticReconnect()
