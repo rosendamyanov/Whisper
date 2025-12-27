@@ -11,6 +11,7 @@ interface ChatState {
 
   fetchChats: (currentUserId: string) => Promise<void>;
   setSelectedChat: (id: string) => void; // <--- NEW
+  
 }
 
 export const useChatStore = create<ChatState>((set) => ({
