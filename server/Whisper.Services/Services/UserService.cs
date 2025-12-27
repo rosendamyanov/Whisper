@@ -106,5 +106,14 @@ namespace Whisper.Services.Services
 
             return ApiResponse<UserSessionResponseDto>.Success(session, AuthMessages.UserLogged);
         }
+
+        public async Task<ApiResponse<List<UserBasicDto>>> FindUsersByUsername(string query)
+        {
+            var users = await _userRepository.FindUsersByUsernameAsync(query);
+
+            var userDtos = _userFactory.Map(users);
+
+            return ApiResponse<List<UserBasicDto>>.Success(userDtos);
+        }
     }
 }

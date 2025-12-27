@@ -8,5 +8,6 @@ namespace Whisper.Services.Services.Interfaces
     {
         Task<ApiResponse<UserSessionResponseDto>> Login(UserLoginRequestDTO requestUser);
         Task<ApiResponse<UserSessionResponseDto>> Register(UserRegisterRequestDTO requestUser);
+        Task<ApiResponse<List<UserBasicDto>>> FindUsersByUsername(string query);
     }
 }

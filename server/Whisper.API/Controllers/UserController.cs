@@ -67,5 +67,12 @@ namespace Whisper.API.Controllers
             ApiResponse<string> response = await _authService.Logout(logoutRequestDto);
             return response.IsSuccess ? Ok(response) : Unauthorized(response);
         }
+
+        [HttpGet("search")]
+        public async Task<IActionResult> FindUsersByUsername([FromQuery] string query)
+        {
+            var response = await _userService.FindUsersByUsername(query);
+            return response.IsSuccess ? Ok(response) : BadRequest(response);
+        }
     }
 }

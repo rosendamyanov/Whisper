@@ -31,7 +31,7 @@ namespace Whisper.Services.Factories
             return (user, credentials);
         }
 
-        public UserSessionResponseDto Map (AuthResponseDto session, User user)
+        public UserSessionResponseDto Map(AuthResponseDto session, User user)
         {
             UserSessionResponseDto responseDto = new UserSessionResponseDto
             {
@@ -44,6 +44,17 @@ namespace Whisper.Services.Factories
                 }
             };
             return responseDto;
+        }
+
+        public List<UserBasicDto> Map(List<User> user)
+        {
+            return user.Select(u => new UserBasicDto
+            {
+                Id = u.Id,
+                Username = u.Username,
+                Role = u.Role,
+                ProfilePictureUrl = u.ProfilePictureUrl ?? string.Empty
+            }).ToList();
         }
     }
 }

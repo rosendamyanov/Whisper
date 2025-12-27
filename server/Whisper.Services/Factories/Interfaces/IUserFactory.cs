@@ -10,5 +10,6 @@ namespace Whisper.Services.Factories.Interfaces
     {
         public (User user, UserCredentials credentials) Map(UserRegisterRequestDTO request, string passwordHash);
         public UserSessionResponseDto Map(AuthResponseDto session, User user);
+        public List<UserBasicDto> Map(List<User> user);
     }
 }

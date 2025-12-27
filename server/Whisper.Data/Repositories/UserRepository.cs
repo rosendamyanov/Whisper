@@ -27,6 +27,13 @@ namespace Whisper.Data.Repositories
             return await _context.SaveChangesAsync() > 0;
         }
 
+        public async Task<User?> GetUserByIdAsync(Guid userId)
+        {
+            return await _context.Users
+                                 .Include(u => u.RefreshTokens)
+                                 .FirstOrDefaultAsync(u => u.Id == userId);
+        }
+
         public async Task<(bool usernameExists, bool emailExists)> CheckUserExistenceAsync(string username, string email)
         {
 
@@ -66,5 +73,18 @@ namespace Whisper.Data.Repositories
                 .Include(u => u.RefreshTokens)
                 .FirstOrDefaultAsync(u => u.Username == identifier || u.Email == identifier);
         }
-    }
+
+        public async Task<List<User>> FindUsersByUsernameAsync(string query)
+        {
+            if (string.IsNullOrWhiteSpace(query) || query.Length < 3)
+                return new List<User>();
+
+            return await _context.Users
+                .AsNoTracking()
+                .Where(u => u.Username.Contains(query))
+                .OrderBy(u => u.Username)
+                .Take(10)
+                .ToListAsync();
+        }
+     }
 }

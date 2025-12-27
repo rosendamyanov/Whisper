@@ -148,6 +148,7 @@ namespace Whisper.Api
                     {
                         policy.WithOrigins("http://localhost:5173", 
                                            "https://localhost:5173",
+                                           "https://localhost:7126",
                                            "null") 
                                                                      
                               .AllowCredentials()
