@@ -2,8 +2,8 @@
 {
     public class RefreshRequestDTO
     {
-        public required string AccessToken { get; set; }
-        public required string RefreshToken { get; set; }
-        public required Guid RefreshTokenId { get; set; }
+        public string? AccessToken { get; set; }
+        public string? RefreshToken { get; set; }
+        public Guid? RefreshTokenId { get; set; }
     }
 }

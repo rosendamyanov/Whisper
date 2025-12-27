@@ -14,24 +14,26 @@ namespace Whisper.Authentication.Services.Interfaces
     public interface IAuthService
     {
         /// <summary>
-        /// Generates a new access token using a valid refresh token
+        /// Refreshes the user's authentication session using a valid refresh token, allowing persistent login without re-entering credentials.
         /// </summary>
-        /// <param name="refresh">Optional refresh token details (can use cookies if not provided)</param>
-        /// <returns>ApiResponse containing new JWT tokens or error details</returns>
+        /// <param name="refresh">Optional DTO containing refresh token details. If null, the method attempts to extract tokens from HttpOnly cookies.</param>
+        /// <returns>ApiResponse containing a new Access Token and a new Refresh Token.</returns>
         /// <remarks>
-        /// Implements refresh token rotation for enhanced security:
-        /// - Old refresh token is revoked immediately
-        /// - New refresh token pair is issued
-        /// - Prevents replay attacks with stolen tokens
+        /// <b>Authentication Logic:</b>
+        /// <list type="bullet">
+        /// <item>Identifies the user solely via the valid Refresh Token, enabling session recovery even after the Access Token has been deleted/expired.</item>
+        /// <item>Implements <b>Refresh Token Rotation</b>: The old refresh token is revoked immediately, and a new pair is issued to prevent token theft.</item>
+        /// </list>
         /// 
-        /// Validates:
-        /// - Refresh token exists in database
-        /// - Token hasn't been revoked
-        /// - Token hasn't expired
-        /// - Token hash matches stored value
+        /// <b>Validation Checks:</b>
+        /// <list type="bullet">
+        /// <item>Token ID exists in the database.</item>
+        /// <item>Token matches the stored secure hash.</item>
+        /// <item>Token is active (not revoked) and not expired.</item>
+        /// <item>Associated user account exists.</item>
+        /// </list>
         /// 
-        /// Uses sliding expiration to maintain security while keeping users logged in.
-        /// Accepts tokens from either request body or HttpOnly cookies.
+        /// Supports both JSON-based clients (Mobile/Desktop) and Cookie-based clients (Web) automatically.
         /// </remarks>
         Task<ApiResponse<AuthResponseDto>> RefreshToken(RefreshRequestDTO? refresh = null);
 
