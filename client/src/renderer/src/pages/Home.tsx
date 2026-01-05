@@ -1,33 +1,29 @@
-import { useEffect } from 'react';
-import { Sidebar } from '../components/Sidebar/Sidebar';
-import { ChatArea } from '../components/Chat/ChatArea';
-import { signalRService } from '../services/signalR';
-import { useMessageStore } from '../stores/messageStore';
-import { useVoiceStore } from '../stores/voiceStore';
-import { IncomingCallModal } from '@renderer/components/Voice/IncomingCallModal';
+import { JSX, useEffect } from 'react'
+import { Sidebar } from '../components/Sidebar/Sidebar'
+import { ChatArea } from '../components/Chat/ChatArea'
+import { signalRService } from '../services/signalR'
+import { useMessageStore } from '../stores/messageStore'
+import { useVoiceStore } from '../stores/voiceStore'
+import { IncomingCallModal } from '@renderer/components/Voice/IncomingCallModal'
 
-export const Home = () => {
-  const { initializeListeners } = useMessageStore();
-  const { initVoiceListeners } = useVoiceStore();
+export const Home = (): JSX.Element => {
+  const { initializeListeners } = useMessageStore()
+  const { initVoiceListeners } = useVoiceStore()
 
-  // Initialize SignalR Connection once when Home mounts
-    useEffect(() => {
-        const initApp = async () => {
-            // Chat Connection
-            await signalRService.connect();
-            initializeListeners();
-            
-            // 3. Initialize Voice Listeners (Starts listening for "Ring" signals)
-            await initVoiceListeners(); 
-        };
-        initApp();
-      }, []);
+  useEffect(() => {
+    const initApp = async (): Promise<void> => {
+      await signalRService.connect()
+      initializeListeners()
+
+      await initVoiceListeners()
+    }
+    initApp()
+  }, [initializeListeners, initVoiceListeners])
 
   return (
     <div className="h-screen w-screen relative overflow-hidden bg-[#0a0a0c] text-white selection:bg-[#00b4ff]/30 font-sans">
-      
       {/* Background Effects */}
-      <div 
+      <div
         className="absolute inset-0 z-0 pointer-events-none"
         style={{
           background: `
@@ -43,9 +39,7 @@ export const Home = () => {
         <Sidebar />
         <ChatArea />
       </div>
-      {/* --- 4. MOUNT THE MODAL HERE --- */}
-      {/* This ensures it pops up regardless of which chat you are in */}
-      <IncomingCallModal />  
+      <IncomingCallModal />
     </div>
-  );
-};
+  )
+}

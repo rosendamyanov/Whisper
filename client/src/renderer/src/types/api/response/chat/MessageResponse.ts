@@ -1,26 +1,47 @@
-// Match the C# MessageResponseDto structure
+export interface AttachmentResponse {
+  url: string
+  fileType: string
+  fileName: string
+  fileSize: number
+}
+
+export interface ReactionResponse {
+  emoji: string
+  count: number
+  isReactedByMe: boolean
+}
+
+export interface ReadReceiptResponse {
+  userId: string
+  username: string
+  avatarUrl: string | null
+  readAt: string
+}
+
 export interface MessageResponse {
-    id: string;
-    content: string | null;
-    sentAt: string;
-    isEdited: boolean;
-    editedAt: string | null;
-    isPinned: boolean;
-    type: string;
+  id: string
+  content: string | null
+  sentAt: string
+  isEdited: boolean
+  editedAt: string | null
+  isPinned: boolean
+  type: string
 
-    // Sender Info
-    senderId: string;
-    senderName: string;
-    senderAvatarUrl: string | null;
-    isMe: boolean;
+  senderId: string
+  senderName: string
+  senderAvatarUrl: string | null
+  isMe: boolean
 
-    // Reply Logic
-    replyToId: string | null;
-    replyToSenderName: string | null;
-    replyToContent: string | null;
+  replyToId: string | null
+  replyToSenderName: string | null
+  replyToContent: string | null
 
-    // Collections (You can define specific types for these later if needed)
-    attachments: any[]; 
-    reactions: any[]; 
-    readBy: any[];
+  attachments: AttachmentResponse[]
+  reactions: ReactionResponse[]
+  readBy: ReadReceiptResponse[]
+}
+
+export interface ChatLoadResponse {
+  messages: MessageResponse[]
+  unreadCount: number
 }

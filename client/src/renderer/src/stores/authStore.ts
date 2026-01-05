@@ -1,15 +1,13 @@
-// src/renderer/src/stores/authStore.ts
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import { User } from '../types/api/response/user/User';
+import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
+import { User } from '../types/api/response/user/User'
 
 interface AuthState {
-  user: User | null;
-  isAuthenticated: boolean;
-  
-  // Actions
-  setSession: (user: User) => void;
-  logout: () => void;
+  user: User | null
+  isAuthenticated: boolean
+
+  setSession: (user: User) => void
+  logout: () => void
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -19,11 +17,11 @@ export const useAuthStore = create<AuthState>()(
       isAuthenticated: false,
 
       setSession: (user) => set({ user, isAuthenticated: true }),
-      
-      logout: () => set({ user: null, isAuthenticated: false }),
+
+      logout: () => set({ user: null, isAuthenticated: false })
     }),
     {
-      name: 'whisper-auth-storage', // unique name for localStorage
+      name: 'whisper-auth-storage'
     }
   )
-);
+)

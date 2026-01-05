@@ -1,4 +1,4 @@
 export interface AddUserToChatRequest {
-    chatId: string,
-    userId: string
+  chatId: string
+  userId: string
 }

@@ -1,29 +1,25 @@
-import { create } from 'zustand';
-import { usersApi } from '../services/api/user';
-import { friendshipApi } from '../services/api/friendship';
-import { User } from '../types/api/response/user/User'; 
-import { chatApi } from '../services/api/chat'; 
-import { useChatStore } from './chatStore';     
-import { useAuthStore } from './authStore';
-import { FriendRequest } from '@renderer/types/api/request/friendship/FriendRequest';
+import { create } from 'zustand'
+import { usersApi } from '../services/api/user'
+import { friendshipApi } from '../services/api/friendship'
+import { User } from '../types/api/response/user/User'
+import { chatApi } from '../services/api/chat'
+import { useChatStore } from './chatStore'
+import { useAuthStore } from './authStore'
+import { FriendRequest } from '@renderer/types/api/request/friendship/FriendRequest'
 
 interface FriendState {
-  friends: User[];
-  searchResults: User[];
-  pendingRequests: FriendRequest[];
-  isLoading: boolean;
-  
-  searchUsers: (query: string) => Promise<void>;
-  sendFriendRequest: (userId: string) => Promise<void>;
-  
-  fetchFriends: () => Promise<void>;
-  
-  // --- NEW ACTIONS ---
-  fetchPendingRequests: () => Promise<void>;
-  acceptRequest: (friendshipId: string) => Promise<void>;
-  declineRequest: (friendshipId: string) => Promise<void>;
-  
-  clearSearch: () => void;
+  friends: User[]
+  searchResults: User[]
+  pendingRequests: FriendRequest[]
+  isLoading: boolean
+
+  searchUsers: (query: string) => Promise<void>
+  sendFriendRequest: (userId: string) => Promise<void>
+  fetchFriends: () => Promise<void>
+  fetchPendingRequests: () => Promise<void>
+  acceptRequest: (friendshipId: string) => Promise<void>
+  declineRequest: (friendshipId: string) => Promise<void>
+  clearSearch: () => void
 }
 
 export const useFriendStore = create<FriendState>((set, get) => ({
@@ -33,98 +29,88 @@ export const useFriendStore = create<FriendState>((set, get) => ({
   isLoading: false,
 
   searchUsers: async (query) => {
-    if (!query || query.length < 3) return;
-    set({ isLoading: true });
+    if (!query || query.length < 3) return
+    set({ isLoading: true })
     try {
-      const res = await usersApi.search(query);
-      // Ensure res.data is passed correctly
+      const res = await usersApi.search(query)
       if (res.isSuccess && res.data) {
-        set({ searchResults: res.data });
+        set({ searchResults: res.data })
       } else {
-        set({ searchResults: [] });
+        set({ searchResults: [] })
       }
     } catch (error) {
-      console.error(error);
-      set({ searchResults: [] });
+      console.error(error)
+      set({ searchResults: [] })
     } finally {
-      set({ isLoading: false });
+      set({ isLoading: false })
     }
   },
 
   sendFriendRequest: async (userId) => {
     try {
-      await friendshipApi.sendRequest(userId);
+      await friendshipApi.sendRequest(userId)
     } catch (error) {
-      console.error("Failed to send request", error);
+      console.error('Failed to send request', error)
     }
   },
 
   fetchFriends: async () => {
-    set({ isLoading: true });
+    set({ isLoading: true })
     try {
-      const res = await friendshipApi.getFriends();
+      const res = await friendshipApi.getFriends()
       if (res.isSuccess && res.data) {
-        set({ friends: res.data });
+        set({ friends: res.data })
       }
     } finally {
-      set({ isLoading: false });
+      set({ isLoading: false })
     }
   },
 
   fetchPendingRequests: async () => {
-    // Don't set global isLoading here to avoid flickering the whole UI
     try {
-        const res = await friendshipApi.getPendingRequests();
-        if (res.isSuccess && res.data) {
-            set({ pendingRequests: res.data });
-        }
+      const res = await friendshipApi.getPendingRequests()
+      if (res.isSuccess && res.data) {
+        set({ pendingRequests: res.data })
+      }
     } catch (error) {
-        console.error("Failed to fetch requests", error);
+      console.error('Failed to fetch requests', error)
     }
   },
 
-acceptRequest: async (friendshipId) => {
-      // 1. Find the request object to get the friend's User ID
-      const request = get().pendingRequests.find(r => r.friendshipId === friendshipId);
-      
-      try {
-          // 2. Accept the friendship in the backend
-          await friendshipApi.acceptRequest(friendshipId);
-          
-          // 3. Optimistic update: remove from pending list
-          set(state => ({
-              pendingRequests: state.pendingRequests.filter(req => req.friendshipId !== friendshipId)
-          }));
+  acceptRequest: async (friendshipId) => {
+    const request = get().pendingRequests.find((r) => r.friendshipId === friendshipId)
 
-          // 4. Refresh friend list
-          get().fetchFriends();
+    try {
+      await friendshipApi.acceptRequest(friendshipId)
+      set((state) => ({
+        pendingRequests: state.pendingRequests.filter((req) => req.friendshipId !== friendshipId)
+      }))
 
-          // 5. AUTO-CREATE CHAT: If we found the user ID, create the DM immediately
-          if (request?.userId) {
-              await chatApi.getOrCreateDirectChat(request.userId);
-              
-              // 6. Refresh the Sidebar Chat List
-              const currentUser = useAuthStore.getState().user;
-              if (currentUser?.id) {
-                  useChatStore.getState().fetchChats(currentUser.id);
-              }
-          }
+      get().fetchFriends()
 
-      } catch (error) {
-          console.error("Error accepting request:", error);
+      if (request?.userId) {
+        await chatApi.getOrCreateDirectChat(request.userId)
+
+        const currentUser = useAuthStore.getState().user
+        if (currentUser?.id) {
+          useChatStore.getState().fetchChats(currentUser.id)
+        }
       }
+    } catch (error) {
+      console.error('Error accepting request:', error)
+    }
   },
 
   declineRequest: async (friendshipId) => {
-      try {
-          await friendshipApi.declineRequest(friendshipId);
-          set(state => ({
-              pendingRequests: state.pendingRequests.filter(req => req.friendshipId !== friendshipId)
-          }));
-      } catch (error) {
-          console.error(error);
-      }
+    try {
+      await friendshipApi.declineRequest(friendshipId)
+      set((state) => ({
+        pendingRequests: state.pendingRequests.filter((req) => req.friendshipId !== friendshipId)
+      }))
+    } catch (error) {
+      console.error(error)
+    }
   },
 
   clearSearch: () => set({ searchResults: [] })
-}));
+}))
