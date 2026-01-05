@@ -11,7 +11,7 @@ function App(): JSX.Element {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/register" element={<Register/>} />
+          <Route path="/register" element={<Register />} />
           <Route path="/" element={<Navigate to="/login" replace />} />
         </Routes>
       </div>

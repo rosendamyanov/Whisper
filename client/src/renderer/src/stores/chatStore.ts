@@ -1,17 +1,16 @@
-import { create } from 'zustand';
-import { chatApi } from '../services/api/chat';
-import { mapChatToPreview } from '../utils/mappers/sidebarMapper';
-import { UiChatPreview } from '../types/models/sidebar';
+import { create } from 'zustand'
+import { chatApi } from '../services/api/chat'
+import { mapChatToPreview } from '../utils/mappers/sidebarMapper'
+import { UiChatPreview } from '../types/models/sidebar'
 
 interface ChatState {
-  chats: UiChatPreview[];
-  selectedChatId: string | null; // <--- NEW
-  isLoading: boolean;
-  error: string | null;
+  chats: UiChatPreview[]
+  selectedChatId: string | null
+  isLoading: boolean
+  error: string | null
 
-  fetchChats: (currentUserId: string) => Promise<void>;
-  setSelectedChat: (id: string) => void; // <--- NEW
-  
+  fetchChats: (currentUserId: string) => Promise<void>
+  setSelectedChat: (id: string) => void
 }
 
 export const useChatStore = create<ChatState>((set) => ({
@@ -21,25 +20,22 @@ export const useChatStore = create<ChatState>((set) => ({
   error: null,
 
   fetchChats: async (currentUserId: string) => {
-    set({ isLoading: true, error: null });
+    set({ isLoading: true, error: null })
     try {
-      const apiResponse = await chatApi.getMyChats();
+      const apiResponse = await chatApi.getMyChats()
       if (apiResponse && apiResponse.data) {
-        const cleanChats = apiResponse.data.map((chat) => 
-          mapChatToPreview(chat, currentUserId)
-        );
-        set({ chats: cleanChats });
+        const cleanChats = apiResponse.data.map((chat) => mapChatToPreview(chat, currentUserId))
+        set({ chats: cleanChats })
       } else {
-        set({ error: 'Failed to load chats' });
+        set({ error: 'Failed to load chats' })
       }
     } catch (err) {
-      console.error(err);
-      set({ error: 'An unexpected error occurred' });
+      console.error(err)
+      set({ error: 'An unexpected error occurred' })
     } finally {
-      set({ isLoading: false });
+      set({ isLoading: false })
     }
   },
 
-  // Simple action to update selection
-  setSelectedChat: (id) => set({ selectedChatId: id }) 
-}));
+  setSelectedChat: (id) => set({ selectedChatId: id })
+}))

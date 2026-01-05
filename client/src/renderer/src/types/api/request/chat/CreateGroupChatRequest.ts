@@ -1,4 +1,4 @@
 export interface CreateGroupChatRequest {
-    groupName: string,
-    userIds: string[]
+  groupName: string
+  userIds: string[]
 }

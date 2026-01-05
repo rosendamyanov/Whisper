@@ -1,6 +1,6 @@
 export interface AuthResponse {
-    accessToken: string,
-    refreshToken: string,
-    refreshTokenId: string,
-    accessTokenExpiry: string
+  accessToken: string
+  refreshToken: string
+  refreshTokenId: string
+  accessTokenExpiry: string
 }

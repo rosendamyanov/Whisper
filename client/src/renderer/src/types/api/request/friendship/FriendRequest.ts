@@ -1,6 +1,5 @@
 export interface FriendRequest {
-    friendshipId: string,
-    userId: string,
-    username: string,
-    
+  friendshipId: string
+  userId: string
+  username: string
 }

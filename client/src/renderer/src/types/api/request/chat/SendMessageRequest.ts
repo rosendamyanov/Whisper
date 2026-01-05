@@ -1,4 +1,4 @@
 export interface SendMessageRequest {
-    chatId: string,
-    content: string
+  chatId: string
+  content: string
 }
