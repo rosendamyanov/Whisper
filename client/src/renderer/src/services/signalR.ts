@@ -95,7 +95,7 @@ class SignalRService {
   public async joinChat(chatId: string): Promise<void> {
     await this.invoke('JoinChat', chatId)
   }
-  
+
   public getChatConnection(): signalR.HubConnection | null {
     return this.chatConnection
   }

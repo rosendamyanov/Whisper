@@ -22,7 +22,6 @@ export const axiosInstance = axios.create({
 
 const publicEndpoints = ['/user/login', '/user/register', '/auth/refresh']
 
-// --- CONCURRENCY LOCK & QUEUE ---
 let isRefreshing = false
 let failedQueue: QueueItem[] = []
 
@@ -44,20 +43,17 @@ axiosInstance.interceptors.response.use(
     const originalRequest = error.config as CustomAxiosRequestConfig
     const url = originalRequest?.url
 
-    // Skip public endpoints
     if (url && publicEndpoints.some((endpoint) => url.endsWith(endpoint))) {
       return Promise.reject(error)
     }
 
     if (error.response?.status === 401 && originalRequest && !originalRequest._retry) {
-      // 1. CHECK IF REFRESH IS ALREADY HAPPENING
       if (isRefreshing) {
         console.log('⏳ Another request is refreshing. Queueing this one...')
         return new Promise(function (resolve, reject) {
           failedQueue.push({ resolve, reject })
         })
           .then(() => {
-            // When resolved, retry the original request
             return axiosInstance(originalRequest)
           })
           .catch((err) => {
@@ -65,13 +61,11 @@ axiosInstance.interceptors.response.use(
           })
       }
 
-      // 2. START REFRESH
       originalRequest._retry = true
       isRefreshing = true
       console.log('🔄 Starting Refresh Process...')
 
       try {
-        // Call Refresh (Cookies handle the auth)
         const refreshResponse = await axios.post<ApiResponse<AuthResponse>>(
           `${BASE_URL}/auth/refresh`,
           {},
@@ -84,8 +78,7 @@ axiosInstance.interceptors.response.use(
         if (refreshResponse.data && refreshResponse.data.isSuccess) {
           console.log('✅ Refresh Success! Resuming queue.')
 
-          // 3. SUCCESS: UNLOCK & RETRY OTHERS
-          processQueue(null) // Resolve all queued requests
+          processQueue(null)
           isRefreshing = false
 
           console.log('🚀 Retrying original request')
@@ -96,12 +89,9 @@ axiosInstance.interceptors.response.use(
       } catch (refreshError) {
         console.error('💀 Refresh Failed:', refreshError)
 
-        // 4. FAIL: REJECT EVERYONE
         processQueue(refreshError, null)
         isRefreshing = false
 
-        // Optional: Redirect to login
-        // window.location.href = '/login';
         return Promise.reject(refreshError)
       }
     }
