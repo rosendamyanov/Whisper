@@ -1,48 +1,72 @@
 import * as signalR from '@microsoft/signalr'
+import { StreamManager } from '../core/StreamManager'
+import { VoiceManager } from '../core/VoiceManager'
 
 type EventCallback = (...args: unknown[]) => void
 
 class SignalRService {
-  private connection: signalR.HubConnection | null = null
+  private chatConnection: signalR.HubConnection | null = null
   private callbacks: Record<string, EventCallback[]> = {}
 
+  private streamConnection: signalR.HubConnection | null = null
+  public streamManager: StreamManager | null = null
+
+  private voiceConnection: signalR.HubConnection | null = null
+  public voiceManager: VoiceManager | null = null
+
   public async connect(): Promise<void> {
-    if (this.connection?.state === signalR.HubConnectionState.Connected) return
+    if (
+      this.chatConnection?.state === signalR.HubConnectionState.Connected &&
+      this.streamConnection?.state === signalR.HubConnectionState.Connected &&
+      this.voiceConnection?.state === signalR.HubConnectionState.Connected
+    ) {
+      return
+    }
 
     const token =
       localStorage.getItem('whisper-token') ||
       JSON.parse(localStorage.getItem('whisper-auth-storage') || '{}')?.state?.user?.token
 
     const apiUrl = import.meta.env.VITE_API_URL || 'https://localhost:7126/api'
-
     const rootUrl = apiUrl.replace(/\/api$/, '')
+    const options = { accessTokenFactory: () => token || '' }
 
-    const hubUrl = `${rootUrl}/hubs/chat`
-
-    this.connection = new signalR.HubConnectionBuilder()
-      .withUrl(hubUrl, {
-        accessTokenFactory: () => token || ''
-      })
+    this.chatConnection = new signalR.HubConnectionBuilder()
+      .withUrl(`${rootUrl}/hubs/chat`, options)
       .withAutomaticReconnect()
       .build()
 
-    this.connection.onclose(() => console.log('SignalR Disconnected'))
+    this.chatConnection.on('ReceiveMessage', (msg) => this.emit('ReceiveMessage', msg))
+    this.chatConnection.on('ParticipantLeft', (data) => this.emit('ParticipantLeft', data))
 
-    this.connection.on('ReceiveMessage', (message) => {
-      this.emit('ReceiveMessage', message)
-    })
+    this.streamConnection = new signalR.HubConnectionBuilder()
+      .withUrl(`${rootUrl}/hubs/stream`, options)
+      .withAutomaticReconnect()
+      .build()
 
-    this.connection.on('ReceiveOffer', (data) => this.emit('ReceiveOffer', data))
-    this.connection.on('ReceiveAnswer', (data) => this.emit('ReceiveAnswer', data))
-    this.connection.on('ReceiveIceCandidate', (data) => this.emit('ReceiveIceCandidate', data))
-    this.connection.on('ParticipantLeft', (data) => this.emit('ParticipantLeft', data))
+    this.streamManager = new StreamManager(this.streamConnection)
+
+    this.voiceConnection = new signalR.HubConnectionBuilder()
+      .withUrl(`${rootUrl}/hubs/voice`, options)
+      .withAutomaticReconnect()
+      .build()
+
+    this.voiceManager = new VoiceManager(this.voiceConnection)
 
     try {
-      await this.connection.start()
-      console.log('SignalR Connected')
+      await Promise.all([
+        this.chatConnection.start(),
+        this.streamConnection.start(),
+        this.voiceConnection.start()
+      ])
+      console.log('✅ SignalR Connected: Chat + Stream + Voice ready.')
     } catch (err) {
-      console.error('SignalR Connection Error: ', err)
+      console.error('❌ SignalR Connection Error:', err)
     }
+
+    this.chatConnection.onclose(() => console.log('Chat Disconnected'))
+    this.streamConnection.onclose(() => console.log('Stream Disconnected'))
+    this.voiceConnection.onclose(() => console.log('Voice Disconnected'))
   }
 
   public on(event: string, callback: EventCallback): void {
@@ -62,21 +86,18 @@ class SignalRService {
   }
 
   public async invoke(methodName: string, ...args: unknown[]): Promise<unknown> {
-    if (this.connection?.state === signalR.HubConnectionState.Connected) {
-      return await this.connection.invoke(methodName, ...args)
+    if (this.chatConnection?.state === signalR.HubConnectionState.Connected) {
+      return await this.chatConnection.invoke(methodName, ...args)
     }
-    return Promise.reject(new Error('SignalR connection is not connected.'))
+    return Promise.reject(new Error('Chat connection is not connected.'))
   }
 
   public async joinChat(chatId: string): Promise<void> {
     await this.invoke('JoinChat', chatId)
   }
-
-  public getConnection(): signalR.HubConnection {
-    if (!this.connection) {
-      throw new Error('SignalR connection has not been initialized. Call connect() first.')
-    }
-    return this.connection
+  
+  public getChatConnection(): signalR.HubConnection | null {
+    return this.chatConnection
   }
 }
 
