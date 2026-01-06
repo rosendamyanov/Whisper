@@ -1,25 +1,53 @@
-import { JSX, useEffect, useRef, useState } from 'react'
+import { JSX, useEffect, useRef, useState, useCallback } from 'react'
 import { useChatStore } from '../../stores/chatStore'
 import { useMessageStore } from '../../stores/messageStore'
 import { useAuthStore } from '../../stores/authStore'
 import { useVoiceStore } from '../../stores/voiceStore'
 import { ActiveCallBanner } from '../Voice/ActiveCallBanner'
+import { StreamPlayer } from '../Stream/StreamPlayer'
+import { useStreamStore } from '../../stores/streamStore'
 
 export const ChatArea = (): JSX.Element => {
   const { user } = useAuthStore()
   const { chats, selectedChatId } = useChatStore()
   const { messages, fetchMessages, sendMessage, isLoading } = useMessageStore()
   const { isInCall, callStatus, startCall } = useVoiceStore()
+
+  // STREAM STORE
+  const { startSharing, joinStream, isStreaming, isWatching, availableStreams, monitorChat } =
+    useStreamStore()
+
   const [newMessage, setNewMessage] = useState('')
   const [showParticipants, setShowParticipants] = useState(false)
+
+  // RESIZE STATE
+  const [streamHeight, setStreamHeight] = useState(320)
+  const [isResizing, setIsResizing] = useState(false)
+  const chatContainerRef = useRef<HTMLDivElement>(null)
+
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const selectedChat = chats.find((c) => c.id === selectedChatId)
+
+  // LOGIC: Show stream pane if I am hosting OR a stream is available in this chat
+  // We show it even if I haven't joined yet (so I can see the "Join" preview)
+  const showStreamPane =
+    selectedChatId && (isStreaming || isWatching || !!availableStreams[selectedChatId])
+
+  // Helper to check if we can join (Stream exists + Not hosting + Not watching)
+  const canJoin =
+    selectedChatId && !!availableStreams[selectedChatId] && !isStreaming && !isWatching
 
   useEffect(() => {
     if (selectedChatId) {
       fetchMessages(selectedChatId)
     }
   }, [selectedChatId, fetchMessages])
+
+  useEffect(() => {
+    if (selectedChatId) {
+      monitorChat(selectedChatId)
+    }
+  }, [selectedChatId, monitorChat])
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -58,6 +86,42 @@ export const ChatArea = (): JSX.Element => {
     }
   }
 
+  // --- RESIZE LOGIC ---
+  const startResizing = useCallback(() => {
+    setIsResizing(true)
+  }, [])
+
+  const stopResizing = useCallback(() => {
+    setIsResizing(false)
+  }, [])
+
+  const resize = useCallback(
+    (mouseMoveEvent: MouseEvent) => {
+      if (isResizing && chatContainerRef.current) {
+        const containerRect = chatContainerRef.current.getBoundingClientRect()
+        // Calculate height relative to the container top, subtracting the header height (~80px)
+        const newHeight = mouseMoveEvent.clientY - containerRect.top - 80
+
+        // Clamp height: Min 150px, Max 70% of viewport
+        if (newHeight > 150 && newHeight < window.innerHeight * 0.7) {
+          setStreamHeight(newHeight)
+        }
+      }
+    },
+    [isResizing]
+  )
+
+  useEffect(() => {
+    if (isResizing) {
+      window.addEventListener('mousemove', resize)
+      window.addEventListener('mouseup', stopResizing)
+    }
+    return () => {
+      window.removeEventListener('mousemove', resize)
+      window.removeEventListener('mouseup', stopResizing)
+    }
+  }, [isResizing, resize, stopResizing])
+
   if (!selectedChat) {
     return (
       <div className="flex-1 bg-white/[0.02] backdrop-blur-3xl border border-white/[0.05] rounded-[2.5rem] flex items-center justify-center shadow-2xl">
@@ -70,7 +134,11 @@ export const ChatArea = (): JSX.Element => {
   }
 
   return (
-    <div className="flex-1 bg-white/[0.02] backdrop-blur-3xl border border-white/[0.05] rounded-[2.5rem] flex flex-col relative overflow-hidden shadow-2xl">
+    <div
+      ref={chatContainerRef}
+      className="flex-1 bg-white/[0.02] backdrop-blur-3xl border border-white/[0.05] rounded-[2.5rem] flex flex-col relative overflow-hidden shadow-2xl"
+    >
+      {/* --- HEADER --- */}
       <div className="h-20 px-6 flex items-center justify-between border-b border-white/[0.05] bg-black/10 shrink-0">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 rounded-2xl flex items-center justify-center overflow-hidden bg-slate-800 text-gray-200 border border-white/[0.05]">
@@ -99,7 +167,58 @@ export const ChatArea = (): JSX.Element => {
             </div>
           </div>
         </div>
+
+        {/* ACTION BUTTONS */}
         <div className="flex items-center gap-2">
+          {/* 1. JOIN STREAM BUTTON */}
+          {canJoin && (
+            <button
+              onClick={() => selectedChatId && joinStream(selectedChatId)}
+              className="h-10 px-4 rounded-xl flex items-center gap-2 bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 transition-all border border-emerald-500/20 animate-pulse"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="w-4 h-4"
+              >
+                <path d="M4.5 4.5a3 3 0 00-3 3v9a3 3 0 003 3h8.25a3 3 0 003-3v-9a3 3 0 00-3-3H4.5zM19.94 18.75l-2.69-2.69V7.94l2.69-2.69c.944-.945 2.56-.276 2.56 1.06v11.38c0 1.336-1.616 2.005-2.56 1.06z" />
+              </svg>
+              <span className="text-xs font-bold">Join Stream</span>
+            </button>
+          )}
+
+          {/* 2. SHARE SCREEN BUTTON */}
+          {/* Hide this if we are watching OR if we can join someone else */}
+          {!isWatching && !canJoin && (
+            <button
+              onClick={() => selectedChatId && startSharing(selectedChatId)}
+              disabled={isStreaming}
+              className={`h-10 w-10 rounded-xl flex items-center justify-center transition-all ${
+                isStreaming
+                  ? 'text-red-500 bg-red-500/10 cursor-default border border-red-500/20'
+                  : 'bg-white/[0.05] hover:bg-white/[0.08] text-gray-400 hover:text-white'
+              }`}
+              title="Share Screen"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-5 h-5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25"
+                />
+              </svg>
+            </button>
+          )}
+
+          {/* 3. VOICE CALL BUTTON */}
           <button
             onClick={handleStartCall}
             disabled={isInCall || callStatus === 'outgoing'}
@@ -148,6 +267,24 @@ export const ChatArea = (): JSX.Element => {
 
       {isInCall && <ActiveCallBanner />}
 
+      {/* --- RESIZABLE STREAM PANE --- */}
+      {showStreamPane && selectedChatId && (
+        <div className="relative bg-black shrink-0 flex flex-col" style={{ height: streamHeight }}>
+          <div className="flex-1 min-h-0 relative">
+            <StreamPlayer chatId={selectedChatId} />
+          </div>
+
+          {/* RESIZE HANDLE */}
+          <div
+            className="h-2 bg-[#18181b] hover:bg-[#00b4ff] cursor-row-resize flex items-center justify-center transition-colors shrink-0 z-40 border-t border-b border-white/[0.05]"
+            onMouseDown={startResizing}
+          >
+            <div className="w-10 h-1 rounded-full bg-white/20" />
+          </div>
+        </div>
+      )}
+
+      {/* --- MESSAGES AREA --- */}
       <div className="flex-1 flex overflow-hidden">
         <div className="flex-1 flex flex-col min-w-0">
           <div className="flex-1 overflow-y-auto px-6 space-y-6 pb-28 pt-6 custom-scrollbar">

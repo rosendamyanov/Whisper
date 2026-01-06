@@ -31,12 +31,22 @@ interface ViewerJoinedResponse {
   viewerCount: number
 }
 
+export interface ActiveStreamInfo {
+  chatId: string
+  streamId: string
+  hostUserId: string
+  hostUsername: string
+}
+
 export class StreamManager {
   private localStream: MediaStream | null = null
   private viewers: Map<string, RTCPeerConnection> = new Map()
   private currentChatId: string | null = null
   private currentQualityKey: QualityPresetKey = DEFAULT_QUALITY
   private currentQuality: StreamQualitySettings = QUALITY_PRESETS[DEFAULT_QUALITY]
+  public onStreamStarted: ((info: ActiveStreamInfo) => void) | null = null
+  public onStreamEnded: ((chatId: string) => void) | null = null
+  public onStreamingStatusChanged: ((isStreaming: boolean) => void) | null = null
 
   private rtcConfig: RTCConfiguration = {
     iceServers: [
@@ -156,12 +166,27 @@ export class StreamManager {
     }
 
     if (this.currentChatId) {
-      this.signalR.invoke('EndStream', this.currentChatId).catch(console.error)
+      this.signalR.invoke('EndStream', this.currentChatId).catch(() => {})
     }
 
     this.viewers.forEach((pc) => pc.close())
     this.viewers.clear()
+
+    if (this.hostConnection) {
+      this.hostConnection.close()
+      this.hostConnection = null
+    }
+
     this.currentChatId = null
+
+    if (this.onRemoteStream) {
+      this.onRemoteStream(new MediaStream())
+    }
+
+    if (this.onStreamingStatusChanged) {
+      this.onStreamingStatusChanged(false)
+    }
+
     console.log('Screen share stopped')
   }
 
@@ -187,6 +212,38 @@ export class StreamManager {
     this.currentChatId = null
     if (this.onRemoteStream) {
       this.onRemoteStream(new MediaStream())
+    }
+  }
+
+  public async monitorChat(chatId: string): Promise<ActiveStreamInfo | null> {
+    try {
+      // 1. Join the SignalR Group for this chat on the STREAM hub
+      // (This ensures we get future 'StreamStarted' events)
+      await this.signalR.invoke('JoinStreamGroup', chatId)
+
+      // 2. Ask the server: "Is anyone streaming right now?"
+      // (This fixes the refresh issue)
+      const currentStream = await this.signalR.invoke<ActiveStreamInfo | null>(
+        'GetStreamStatus',
+        chatId
+      )
+
+      if (currentStream) {
+        // Manually trigger the event so our store updates
+        if (this.onStreamStarted) {
+          this.onStreamStarted(currentStream)
+        }
+      } else {
+        // Ensure UI is clear if no stream
+        if (this.onStreamEnded) {
+          this.onStreamEnded(chatId)
+        }
+      }
+
+      return currentStream
+    } catch (error) {
+      console.error('Failed to monitor chat stream:', error)
+      return null
     }
   }
 
@@ -266,6 +323,23 @@ export class StreamManager {
       }
     })
 
+    this.signalR.on(
+      'ReceiveIceCandidate',
+      async (data: { fromUserId: string; candidate: string }) => {
+        const candidate = JSON.parse(data.candidate)
+
+        const viewerPc = this.viewers.get(data.fromUserId)
+        if (viewerPc) {
+          await viewerPc.addIceCandidate(candidate)
+          return
+        }
+
+        if (this.hostConnection) {
+          await this.hostConnection.addIceCandidate(candidate)
+        }
+      }
+    )
+
     this.signalR.on('ReceiveOffer', async (data: { fromUserId: string; offer: string }) => {
       console.log('Received Offer from Host. Accepting...')
 
@@ -275,7 +349,6 @@ export class StreamManager {
       pc.ontrack = (event) => {
         if (event.streams && event.streams[0]) {
           console.log('Remote stream received!')
-
           if (this.onRemoteStream) {
             this.onRemoteStream(event.streams[0])
           }
@@ -299,41 +372,30 @@ export class StreamManager {
         await pc.setRemoteDescription(JSON.parse(data.offer))
         const answer = await pc.createAnswer()
         await pc.setLocalDescription(answer)
-
         await this.signalR.invoke('SendAnswer', this.currentChatId, JSON.stringify(answer))
       } catch (err) {
         console.error('Error accepting stream offer:', err)
       }
     })
 
-    this.signalR.on(
-      'ReceiveIceCandidate',
-      async (data: { fromUserId: string; candidate: string }) => {
-        const candidate = JSON.parse(data.candidate)
-
-        const viewerPc = this.viewers.get(data.fromUserId)
-        if (viewerPc) {
-          await viewerPc.addIceCandidate(candidate)
-          return
-        }
-
-        if (this.hostConnection) {
-          await this.hostConnection.addIceCandidate(candidate)
-        }
+    this.signalR.on('StreamStarted', (info: ActiveStreamInfo) => {
+      console.log(`Stream started in chat ${info.chatId}`)
+      if (this.onStreamStarted) {
+        this.onStreamStarted(info)
       }
-    )
+    })
 
     this.signalR.on('ViewerLeft', (data: { userId: string }) => {
       this.closeViewerConnection(data.userId)
     })
 
-    this.signalR.on('StreamEnded', () => {
-      this.stopScreenShare()
+    this.signalR.on('StreamEnded', (data: { chatId: string }) => {
+      if (this.onStreamEnded) {
+        this.onStreamEnded(data.chatId)
+      }
 
-      if (this.hostConnection) {
-        this.hostConnection.close()
-        this.hostConnection = null
-        if (this.onRemoteStream) this.onRemoteStream(new MediaStream())
+      if (this.currentChatId === data.chatId) {
+        this.stopScreenShare()
       }
     })
   }
